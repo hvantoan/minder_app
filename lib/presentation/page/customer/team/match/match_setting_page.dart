@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:minder/domain/entity/match/match.dart';
-import 'package:minder/domain/entity/team/team.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/match/controller/match_controller_cubit.dart';
 import 'package:minder/presentation/bloc/match/data/match/match_cubit.dart';
@@ -45,31 +44,16 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
   @override
   void initState() {
     GetIt.instance.get<MatchCubit>().clean();
-    GetIt.instance.get<MatchCubit>().getMatchById(widget.match.id!);
+    GetIt.instance.get<MatchControllerCubit>().check(widget.match.id!);
     GetIt.instance.get<MatchControllerCubit>().stream.listen((event) async {
       if (!mounted) return;
       if (event is MatchControllerSuccess) {
-        GetIt.instance.get<MatchControllerCubit>().clean();
         GetIt.instance.get<MatchCubit>().getMatchById(widget.match.id!);
+        GetIt.instance.get<MatchControllerCubit>().clean();
         return;
       }
     });
 
-    GetIt.instance.get<MatchCubit>().stream.listen((event) async {
-      if (!mounted) return;
-      if (event is MatchSuccess) {
-        if (event.match.hostTeam?.stadium != null &&
-            event.match.hostTeam?.from != null &&
-            event.match.hostTeam?.to != null &&
-            event.match.opposingTeam?.stadium != null &&
-            event.match.opposingTeam?.from != null &&
-            event.match.opposingTeam?.to != null &&
-            (event.match.status ?? 0) < 2) {
-          GetIt.instance.get<MatchControllerCubit>().check(event.match.id!);
-          return;
-        }
-      }
-    });
     super.initState();
   }
 
@@ -542,7 +526,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
       if (mounted) GetIt.instance.get<LoadingCoverController>().on(context);
       GetIt.instance
           .get<MatchControllerCubit>()
-          .selectStadium(widget.match.id!, result, team.teamId!);
+          .selectStadium(widget.match.id!, result, team.teamId!).then((value) =>     GetIt.instance.get<MatchControllerCubit>().check(widget.match.id!));
     }
   }
 

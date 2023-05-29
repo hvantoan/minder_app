@@ -60,7 +60,7 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
     GetIt.instance.get<LoadingCoverController>().on(context);
     GetIt.instance
         .get<MatchControllerCubit>()
-        .selectTime(matchId, dayOfWeek, timeOption, teamId);
+        .selectTime(matchId, dayOfWeek, timeOption, teamId).then((value) =>     GetIt.instance.get<MatchControllerCubit>().check(matchId));
   }
 }
 
