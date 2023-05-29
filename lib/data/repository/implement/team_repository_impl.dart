@@ -18,13 +18,7 @@ class TeamRepository extends TeamRepositoryInterface {
   Future<Either<Failures, List<Team>>> getTeams({bool isMyTeam = true}) async {
     try {
       final response = await TeamAPI().getTeams(isMyTeam: isMyTeam);
-      final List<Team> temp = response.map((e) => Team.fromModel(e)).toList();
-      final List<Team> teams = List.empty(growable: true);
-      for (var element in temp) {
-        final team = (await getTeamById(teamId: element.id)).right;
-        team.regency = element.regency;
-        teams.add(team);
-      }
+      final List<Team> teams =  response.map((e) => Team.fromModel(e)).toList();
       return Right(teams);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));
@@ -67,12 +61,6 @@ class TeamRepository extends TeamRepositoryInterface {
     try {
       final response = await TeamAPI().getTeamById(teamId: teamId);
       final Team team = Team.fromModel(response);
-      if (team.members != null) {
-        for (var member in team.members!) {
-          member.user =
-              User.fromModel(await UserAPI().getUserById(id: member.userId));
-        }
-      }
       return Right(team);
     } catch (e) {
       if (e is TeamNotExistException) {
@@ -88,12 +76,6 @@ class TeamRepository extends TeamRepositoryInterface {
     try {
       final response = await TeamAPI().getTeamById(teamId: teamId);
       final Team team = Team.fromModel(response);
-      if (team.members != null) {
-        for (var member in team.members!) {
-          member.user =
-              User.fromModel(await UserAPI().getUserById(id: member.userId));
-        }
-      }
       String userId = team.members
               ?.firstWhere((element) =>
                   element.user!.name!.toLowerCase().trim() ==

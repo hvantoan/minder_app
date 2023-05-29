@@ -49,8 +49,9 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
     GetIt.instance.get<MatchControllerCubit>().stream.listen((event) async {
       if (!mounted) return;
       if (event is MatchControllerSuccess) {
-        await GetIt.instance.get<MatchCubit>().getMatchById(widget.match.id!);
         GetIt.instance.get<MatchControllerCubit>().clean();
+        GetIt.instance.get<MatchCubit>().getMatchById(widget.match.id!);
+        return;
       }
     });
 
@@ -65,10 +66,17 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
             event.match.opposingTeam?.to != null &&
             (event.match.status ?? 0) < 2) {
           GetIt.instance.get<MatchControllerCubit>().check(event.match.id!);
+          return;
         }
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    GetIt.instance.get<MatchCubit>().clean();
+    super.dispose();
   }
 
   @override
@@ -114,7 +122,6 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
               match.teamSide == 1 ? match.opposingTeam : match.hostTeam;
           final host =
               match.teamSide == 1 ? match.hostTeam : match.opposingTeam;
-          final myTeam = match.teamSide == 1 ? match.host : match.opposite;
           return SingleChildScrollView(
               padding:
                   const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
@@ -223,7 +230,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
                                       if (host!.stadium != null)
                                         GestureDetector(
                                           onTap: () =>
-                                              selectStadium(host, myTeam!),
+                                              selectStadium(host),
                                           child: Container(
                                             color: Colors.transparent,
                                             child: Row(
@@ -288,7 +295,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
                                       else
                                         ButtonWidget.primaryWhite(
                                             onTap: () =>
-                                                selectStadium(host, myTeam!),
+                                                selectStadium(host),
                                             content:
                                                 S.current.btn_select_stadium),
                                       ListView.builder(
@@ -522,14 +529,14 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
     );
   }
 
-  void selectStadium(MatchTeam team, Team myTeam) async {
+  void selectStadium(MatchTeam team) async {
     final result = await SheetWidget.base(
         context: context,
         isExpand: true,
         body: SelectStadiumPage(
           stadium: team.stadium,
-          latLng: LatLng(myTeam.gameSetting!.latitude!.toDouble(),
-              myTeam.gameSetting!.longitude!.toDouble()),
+          latLng: LatLng(team.latitude!,
+              team.longitude!),
         ));
     if (result != null) {
       if (mounted) GetIt.instance.get<LoadingCoverController>().on(context);

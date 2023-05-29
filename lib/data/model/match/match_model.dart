@@ -10,8 +10,6 @@ class MatchModel {
   int? teamSide;
   MatchTeamModel? hostTeam;
   MatchTeamModel? opposingTeam;
-  TeamModel? opposite;
-  TeamModel? host;
   List<TimeChoiceModel>? timeChoices;
 
   MatchModel(
@@ -57,7 +55,10 @@ class MatchTeamModel {
   String? hostMatch;
   String? opposingMatch;
   StadiumModel? stadium;
-  TeamModel? team;
+  String? teamName;
+  String? avatar;
+  double? latitude;
+  double? longitude;
 
   MatchTeamModel(
       this.id,
@@ -70,7 +71,8 @@ class MatchTeamModel {
       this.hostMatch,
       this.opposingMatch,
       this.stadium,
-      this.team);
+      this.teamName,
+      this.avatar, this.latitude, this.longitude);
 
   MatchTeamModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -82,7 +84,10 @@ class MatchTeamModel {
     to = json["to"];
     stadium =
         json["stadium"] != null ? StadiumModel.fromJson(json["stadium"]) : null;
-    team = json["team"] != null ? TeamModel.fromJson(json["team"]) : null;
+    teamName = json["teamName"];
+    avatar = json["avatar"];
+    latitude = json["latitude"]??0;
+    longitude = json["longitude"]??0;
   }
 }
 

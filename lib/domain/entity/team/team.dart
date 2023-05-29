@@ -10,6 +10,7 @@ class Team {
     this.regency,
     this.createAt,
     this.description,
+    this.owner,
     this.avatar,
     this.cover,
     this.gameSetting,
@@ -24,6 +25,7 @@ class Team {
   bool? isAutoTime;
   int? regency;
   String? createAt;
+  String? owner;
   String? description;
   String? avatar;
   String? cover;
@@ -39,6 +41,7 @@ class Team {
     regency = teamModel.regency;
     createAt = teamModel.createAt;
     description = teamModel.description;
+    owner = teamModel.owner;
     avatar = teamModel.avatar;
     cover = teamModel.cover;
     groupId = teamModel.groupId;
@@ -60,19 +63,13 @@ class Member {
   User? user;
 
   Member(
-      {required this.id,
-      required this.userId,
-      required this.teamId,
-      required this.regency,
-      this.user});
+      {required this.id, required this.userId, required this.teamId, required this.regency, this.user});
 
   Member.fromModel(MemberModel memberModel) {
     id = memberModel.id;
     userId = memberModel.userId;
     teamId = memberModel.teamId;
     regency = memberModel.regency;
-    if (memberModel.userModel != null) {
-      user = User.fromModel(memberModel.userModel!);
-    }
+    user = memberModel.user!=null?User.fromModel(memberModel.user!):null;
   }
 }

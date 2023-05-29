@@ -451,7 +451,7 @@ class _TeamSettingPageState extends State<TeamSettingPage> {
               child: Stack(
                 children: [
                   AvatarWidget.base(
-                      imagePath: null,
+                      imagePath: member.user!.avatar,
                       name: member.user!.name!,
                       isBorder: member.userId == me?.userId,
                       size: mediumAvatarSize),

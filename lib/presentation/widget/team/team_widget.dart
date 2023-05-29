@@ -54,12 +54,8 @@ class TeamWidget {
                   const SizedBox(
                     width: 4.0,
                   ),
-                  if (team.members != null)
                     Text(
-                      team.members!
-                          .firstWhere((element) => element.regency == 2)
-                          .user!
-                          .name!,
+                      team.owner!,
                       style: BaseTextStyle.caption(color: BaseColor.grey900),
                     ),
                 ],
