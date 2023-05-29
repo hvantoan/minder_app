@@ -13,9 +13,14 @@ import 'package:minder/presentation/widget/message/time_line_message.dart';
 import 'package:minder/util/style/base_style.dart';
 
 class ConversationPage extends StatefulWidget {
-  const ConversationPage({super.key, required this.group});
+  const ConversationPage({
+    super.key,
+    required this.group,
+    this.appBarDisplay = true,
+  });
 
   final Group group;
+  final bool appBarDisplay;
   @override
   State<ConversationPage> createState() => _ConversationPageState();
 }
@@ -28,8 +33,14 @@ class _ConversationPageState extends State<ConversationPage> {
       ListMessageRequest(groupId: "", pageIndex: 0, pageSize: 20);
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
-    _controller.addListener(() {});
+    GetIt.instance.get<MessageCubit>().reset();
     super.initState();
   }
 
@@ -40,30 +51,35 @@ class _ConversationPageState extends State<ConversationPage> {
     return Scaffold(
       appBar: _buildAppBar(),
       resizeToAvoidBottomInset: true,
-      bottomNavigationBar: ChatInput(
-        groupId: widget.group.id,
-        onFocus: () => _jumpToEnd(true),
-      ),
+      bottomNavigationBar: widget.appBarDisplay
+          ? ChatInput(
+              groupId: widget.group.id,
+              onFocus: () => _jumpToEnd(true),
+            )
+          : null,
       body: _buildBody(),
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      shadowColor: Colors.black.withOpacity(0.25),
-      toolbarHeight: 56,
-      iconTheme: const IconThemeData(
-        color: BaseColor.grey900,
-      ),
-      title: Row(
-        children: [
-          AvatarWidget.base(size: 32, imagePath: widget.group.avatar),
-          const SizedBox(width: 16),
-          Text(widget.group.title, style: BaseTextStyle.label()),
-        ],
-      ),
-    );
+  AppBar? _buildAppBar() {
+    if (widget.appBarDisplay) {
+      return AppBar(
+        backgroundColor: Colors.white,
+        shadowColor: Colors.black.withOpacity(0.25),
+        toolbarHeight: 56,
+        iconTheme: const IconThemeData(
+          color: BaseColor.grey900,
+        ),
+        title: Row(
+          children: [
+            AvatarWidget.base(size: 32, imagePath: widget.group.avatar),
+            const SizedBox(width: 16),
+            Text(widget.group.title, style: BaseTextStyle.label()),
+          ],
+        ),
+      );
+    }
+    return null;
   }
 
   Widget _buildBody() {

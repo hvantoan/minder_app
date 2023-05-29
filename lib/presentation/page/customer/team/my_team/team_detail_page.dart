@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:minder/domain/entity/group/group.dart';
 import 'package:minder/domain/entity/team/team.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/team/data/team/team_cubit.dart';
@@ -50,6 +51,7 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
     GetIt.instance.get<TeamCubit>().stream.listen((event) {
       if (!mounted) return;
     });
+
     super.initState();
   }
 
@@ -88,10 +90,19 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                           team: state.team,
                           isScroll: isScroll,
                         ),
-                        ChatPage(
-                          isScroll: isScroll,
+                        TeamChatPage(
+                          appBarDisplay: false,
+                          group: Group(
+                            id: "",
+                            title: state.team.name,
+                            chanelId: state.team.id,
+                            lastMessage: "",
+                            createAt: DateTime.now(),
+                            type: 0,
+                            displayType: "",
+                            online: true,
+                          ),
                           height: (isScroll ? 0 : _headerHeight),
-                          groupId: state.team.groupId ?? "",
                         ),
                         if (widget.regency > 0)
                           FindMemberPage(

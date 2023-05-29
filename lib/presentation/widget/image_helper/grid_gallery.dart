@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:minder/util/style/base_color.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class GridGallery extends StatefulWidget {
@@ -56,6 +57,17 @@ class _GridGalleryState extends State<GridGallery> {
                           fit: BoxFit.cover,
                         ),
                       ),
+                      if (asset.type == AssetType.video)
+                        const Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 5, bottom: 5),
+                            child: Icon(
+                              Icons.radio_button_checked,
+                              color: BaseColor.green500,
+                            ),
+                          ),
+                        ),
                       if (asset.type == AssetType.video)
                         const Align(
                           alignment: Alignment.bottomRight,

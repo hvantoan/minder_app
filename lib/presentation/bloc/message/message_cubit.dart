@@ -30,6 +30,10 @@ class MessageCubit extends Cubit<MessageState> {
     emit(SendedMessageState());
   }
 
+  reset() {
+    emit(MessageInitial());
+  }
+
   sendMessage(SendMessageRequest request) async {
     emit(SendingMessageState(
       message: Message(
