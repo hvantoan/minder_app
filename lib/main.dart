@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:minder/presentation/bloc/app_layer/app_layer_cubit.dart';
 import 'package:minder/presentation/bloc/authentication_layer/authentication_layer_cubit.dart';
 import 'package:minder/presentation/bloc/base_layer/base_layer_cubit.dart';
+import 'package:minder/presentation/bloc/chat/chat_cubit.dart';
 import 'package:minder/presentation/bloc/file/controller/file_controller_cubit.dart';
 import 'package:minder/presentation/bloc/group/group_cubit.dart';
 import 'package:minder/presentation/bloc/location/data/locations/locations_cubit.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
         BlocProvider.value(value: GetIt.instance.get<MatchesCubit>()),
         BlocProvider.value(value: GetIt.instance.get<MatchControllerCubit>()),
         BlocProvider.value(value: GetIt.instance.get<MatchCubit>()),
+        BlocProvider.value(value: GetIt.instance.get<ChatCubit>())
       ],
       child: buildSystemUiOverlay(),
     );

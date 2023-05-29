@@ -25,4 +25,13 @@ class ChatUseCase extends ChatUseCaseInterface {
     }
     return Right(response.right);
   }
+
+  @override
+  Future<Either<Failures, Message>> get(String id) async {
+    final response = await ChatRepository().get(id);
+    if (response.isLeft) {
+      return Left(response.left);
+    }
+    return Right(response.right);
+  }
 }

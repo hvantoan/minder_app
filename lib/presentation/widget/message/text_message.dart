@@ -42,7 +42,7 @@ class TextMessage extends StatelessWidget {
                 if (message.isDisplayAvatar && !message.isSend)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(message.name,
+                    child: Text(message.name ?? "",
                         style: BaseTextStyle.body2(color: BaseColor.blue500)),
                   ),
                 Container(

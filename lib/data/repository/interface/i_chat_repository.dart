@@ -8,4 +8,5 @@ abstract class ChatRepositoryInterface {
   Future<Either<Failures, List<Message>>> getMessage(
       ListMessageRequest request);
   Future<Either<Failures, bool>> sendMessage(SendMessageRequest request);
+  Future<Either<Failures, Message>> get(String id);
 }

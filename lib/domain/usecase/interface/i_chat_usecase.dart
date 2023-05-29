@@ -9,4 +9,5 @@ abstract class ChatUseCaseInterface {
       ListMessageRequest request);
 
   Future<Either<Failures, bool>> sendMessage(SendMessageRequest request);
+  Future<Either<Failures, Message>> get(String id);
 }

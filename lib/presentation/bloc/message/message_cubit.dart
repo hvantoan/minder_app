@@ -20,22 +20,32 @@ class MessageCubit extends Cubit<MessageState> {
     Either<Failures, List<Message>> messages =
         await ChatUseCase().getMessage(request);
     if (messages.isRight) {
-      emit(MessageLoadedState(message: messages.right));
+      emit(MessageLoadedState(messages: messages.right));
     } else {
       emit(MessageErrorState());
     }
   }
 
-  onNotify() {
-    emit(OnLoadMessageState());
+  emitState() {
+    emit(SendedMessageState());
   }
 
   sendMessage(SendMessageRequest request) async {
+    emit(SendingMessageState(
+      message: Message(
+          content: request.content,
+          groupId: request.groupId,
+          isDisplayAvatar: false,
+          isDisplayTime: true,
+          isSend: true,
+          messageType: 0,
+          senderId: "",
+          createAt: DateTime.now()),
+    ));
+
     Either<Failures, bool> messages = await ChatUseCase().sendMessage(request);
     if (messages.isLeft) {
       emit(MessageErrorState());
-    } else {
-      emit(OnLoadMessageState());
     }
   }
 }

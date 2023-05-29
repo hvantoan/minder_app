@@ -41,4 +41,25 @@ class MessageAPI {
       throw DataParsingException();
     }
   }
+
+  Future<MessageModel> get(String id) async {
+    try {
+      final BaseResponse response = await BaseAPIService.get(
+        uri: "${ServicePath.sendMessage}/$id",
+        withToken: true,
+      );
+
+      if (response.isSuccess) {
+        return MessageModel.fromJson(response.data!);
+      }
+
+      switch (response.statusCode) {
+        default:
+          throw DataParsingException();
+      }
+    } catch (e) {
+      if (e is ResponseException || e is AuthenticationException) rethrow;
+      throw DataParsingException();
+    }
+  }
 }

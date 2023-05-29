@@ -9,28 +9,19 @@ class MessageInitial extends MessageState {}
 class MessageLoadingState extends MessageState {}
 
 class MessageLoadedState extends MessageState {
-  final List<Message> message;
-  MessageLoadedState({required this.message});
+  final List<Message> messages;
+  MessageLoadedState({required this.messages});
 
-  List<Object> get props => [message];
+  List<Object> get props => [messages];
 }
 
 class MessageErrorState extends MessageState {}
 
-class SendMessageState extends MessageState {}
-
-class OnLoadMessageState extends MessageState {}
-
-class OnUpdateMessageState extends MessageState {
-  final List<Message> message;
-  OnUpdateMessageState({required this.message});
+class SendingMessageState extends MessageState {
+  final Message message;
+  SendingMessageState({required this.message});
 
   List<Object> get props => [message];
 }
 
-class OnReceiveMessageState extends MessageState {
-  final List<Message> message;
-  OnReceiveMessageState({required this.message});
-
-  List<Object> get props => [message];
-}
+class SendedMessageState extends MessageState {}

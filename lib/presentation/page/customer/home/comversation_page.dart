@@ -23,6 +23,7 @@ class ConversationPage extends StatefulWidget {
 class _ConversationPageState extends State<ConversationPage> {
   final ScrollController _controller = ScrollController();
   List<Message> _messages = List.empty(growable: true);
+  List<Message> loadingMessage = List.empty(growable: true);
   ListMessageRequest req =
       ListMessageRequest(groupId: "", pageIndex: 0, pageSize: 20);
 
@@ -37,49 +38,69 @@ class _ConversationPageState extends State<ConversationPage> {
     req.groupId = widget.group.id;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.black.withOpacity(0.25),
-        toolbarHeight: 56,
-        iconTheme: const IconThemeData(
-          color: BaseColor.grey900,
-        ),
-        title: Row(
-          children: [
-            AvatarWidget.base(size: 32, imagePath: widget.group.avatar),
-            const SizedBox(width: 16),
-            Text(widget.group.title, style: BaseTextStyle.label()),
-          ],
-        ),
-      ),
-      resizeToAvoidBottomInset: false,
+      appBar: _buildAppBar(),
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: ChatInput(
         groupId: widget.group.id,
         onFocus: () => _jumpToEnd(true),
       ),
-      body: BlocBuilder<MessageCubit, MessageState>(
-        bloc: GetIt.instance.get<MessageCubit>()..getMessage(req),
-        builder: (context, state) {
-          if (state is MessageInitial) {
-            GetIt.instance.get<MessageCubit>().getMessage(req);
-          }
-          if (state is MessageLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is MessageLoadedState) {
-            _messages = state.message;
-            _jumpToEnd(true);
-          }
+      body: _buildBody(),
+    );
+  }
 
-          if (state is OnReceiveMessageState) {}
-          if (_messages.isEmpty) {
-            return Center(
-                child: Text(
-              S.current.txt_no_message,
-              style: BaseTextStyle.body1(),
-            ));
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      shadowColor: Colors.black.withOpacity(0.25),
+      toolbarHeight: 56,
+      iconTheme: const IconThemeData(
+        color: BaseColor.grey900,
+      ),
+      title: Row(
+        children: [
+          AvatarWidget.base(size: 32, imagePath: widget.group.avatar),
+          const SizedBox(width: 16),
+          Text(widget.group.title, style: BaseTextStyle.label()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return BlocBuilder<MessageCubit, MessageState>(
+      bloc: GetIt.instance.get<MessageCubit>()..getMessage(req),
+      builder: (context, state) {
+        if (state is MessageInitial) {
+          GetIt.instance.get<MessageCubit>().getMessage(req);
+        }
+
+        if (state is MessageLoadedState) {
+          if (loadingMessage.isNotEmpty) {
+            loadingMessage.removeAt(0);
           }
-          return SingleChildScrollView(
+          _messages = state.messages;
+          _jumpToEnd(true);
+        }
+
+        if (state is SendingMessageState) {
+          loadingMessage.add(state.message);
+          _jumpToEnd(true);
+        }
+
+        if (state is SendedMessageState) {
+          GetIt.instance.get<MessageCubit>().getMessage(req);
+        }
+
+        if (_messages.isEmpty) {
+          return Center(
+              child: Text(
+            S.current.txt_no_message,
+            style: BaseTextStyle.body1(),
+          ));
+        }
+        return GestureDetector(
+          onTap: () => FocusManager,
+          child: SingleChildScrollView(
             controller: _controller,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -103,13 +124,15 @@ class _ConversationPageState extends State<ConversationPage> {
                       return TextMessage(message: message);
                     },
                   ),
+                  ...List.generate(loadingMessage.length,
+                      (index) => TextMessage(message: loadingMessage[index])),
                   const SizedBox(height: 16)
                 ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

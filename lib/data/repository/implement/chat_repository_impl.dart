@@ -27,4 +27,15 @@ class ChatRepository extends ChatRepositoryInterface {
       return Left(DataParsingFailures());
     }
   }
+
+  @override
+  Future<Either<Failures, Message>> get(String id) async {
+    try {
+      final messageModel = await MessageAPI().get(id);
+
+      return Right(Message.fromModel(messageModel));
+    } catch (e) {
+      return Left(DataParsingFailures());
+    }
+  }
 }

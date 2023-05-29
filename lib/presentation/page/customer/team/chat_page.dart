@@ -4,8 +4,10 @@ import 'package:get_it/get_it.dart';
 import 'package:minder/data/model/chat/list_message_request.dart';
 import 'package:minder/domain/entity/chat/message.dart';
 import 'package:minder/presentation/bloc/message/message_cubit.dart';
+import 'package:minder/presentation/widget/image_helper/grid_gallery.dart';
 import 'package:minder/presentation/widget/message/text_message.dart';
 import 'package:minder/presentation/widget/message/time_line_message.dart';
+import 'package:minder/presentation/widget/sheet/sheet_widget.dart';
 
 const double _padding = 16;
 
@@ -29,6 +31,7 @@ class _ChatPageState extends State<ChatPage> {
   final FocusNode _focusNode = FocusNode();
   bool _enableScrollEnd = false;
   List<Message> _messages = List.empty(growable: true);
+  List<Message> _loadingMessage = List.empty(growable: true);
   final ListMessageRequest _request = ListMessageRequest(groupId: "");
 
   @override
@@ -59,13 +62,9 @@ class _ChatPageState extends State<ChatPage> {
     return BlocBuilder<MessageCubit, MessageState>(
         bloc: GetIt.instance.get<MessageCubit>()..getMessage(_request),
         builder: (context, state) {
-          if (state is OnUpdateMessageState) {
-            _messages = state.message;
+          if (state is SendingMessageState) {
+            _loadingMessage.add(state.message);
             _jumpToEnd(true);
-          }
-
-          if (state is OnLoadMessageState) {
-            GetIt.instance.get<MessageCubit>().getMessage(_request);
           }
 
           if (state is MessageErrorState) {
@@ -108,13 +107,13 @@ class _ChatPageState extends State<ChatPage> {
                       return TextMessage(message: message);
                     },
                   ),
+                  ...List.generate(_loadingMessage.length,
+                      (index) => TextMessage(message: _loadingMessage[index])),
                   const SizedBox(height: 16),
                 ]),
               ),
             ),
           ),
-          // SizedBox(
-          //     height: widget.height + MediaQuery.of(context).viewInsets.bottom)
         ],
       ),
     );

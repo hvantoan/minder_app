@@ -19,18 +19,18 @@ class NotificationLayerCubit extends Cubit<NotificationLayerState> {
 
     final httpConnectionOptions = HttpConnectionOptions(
       transport: HttpTransportType.WebSockets,
-      accessTokenFactory: () async => token ?? "",
-      logMessageContent: true,
+      logMessageContent: false,
     );
 
     final hub = HubConnectionBuilder()
-        .withUrl(ServicePath.hub, options: httpConnectionOptions)
+        .withUrl("${ServicePath.hub}?access_token=$token",
+            options: httpConnectionOptions)
         .withHubProtocol(JsonHubProtocol())
         .build();
     hub.on(
       "RecieveMessage",
       (arguments) {
-        GetIt.instance.get<MessageCubit>().emit(OnLoadMessageState());
+        GetIt.instance.get<MessageCubit>().emitState();
       },
     );
     await hub.start();

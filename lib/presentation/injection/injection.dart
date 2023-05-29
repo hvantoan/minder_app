@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:minder/presentation/bloc/app_layer/app_layer_cubit.dart';
 import 'package:minder/presentation/bloc/authentication_layer/authentication_layer_cubit.dart';
 import 'package:minder/presentation/bloc/base_layer/base_layer_cubit.dart';
+import 'package:minder/presentation/bloc/chat/chat_cubit.dart';
 import 'package:minder/presentation/bloc/file/controller/file_controller_cubit.dart';
 import 'package:minder/presentation/bloc/group/group_cubit.dart';
 import 'package:minder/presentation/bloc/location/data/locations/locations_cubit.dart';
@@ -21,6 +22,7 @@ import 'package:minder/presentation/bloc/team/data/team/team_cubit.dart';
 import 'package:minder/presentation/bloc/team/data/teams/team_cubit.dart';
 import 'package:minder/presentation/bloc/user/controller/user_controller_cubit.dart';
 import 'package:minder/presentation/bloc/user/user_cubit.dart';
+import 'package:minder/presentation/widget/image_helper/image_helper.dart';
 import 'package:minder/util/controller/loading_cover_controller.dart';
 
 Future<void> configureDependencies() async {
@@ -46,6 +48,7 @@ Future<void> configureDependencies() async {
 
   GetIt.instance.registerLazySingleton<GroupCubit>(() => GroupCubit());
   GetIt.instance.registerLazySingleton<MessageCubit>(() => MessageCubit());
+  GetIt.instance.registerLazySingleton<ChatCubit>(() => ChatCubit());
   GetIt.instance.registerLazySingleton<NotificationLayerCubit>(
       () => NotificationLayerCubit());
   GetIt.instance
@@ -62,4 +65,5 @@ Future<void> configureDependencies() async {
   /// Controller
   GetIt.instance.registerLazySingleton<LoadingCoverController>(
       () => LoadingCoverController());
+  GetIt.instance.registerLazySingleton<ImageHelper>(() => ImageHelper());
 }
