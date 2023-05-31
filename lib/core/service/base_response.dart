@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:minder/core/exception/exception.dart';
 import 'package:minder/util/constant/enum/response_status_case_enum.dart';
@@ -30,7 +28,7 @@ class BaseResponse {
       }
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
-      //   debugPrint(result.toString());
+      print("mgs: ${result["response"]["message"]}");
       return BaseResponse(
         isSuccess: result["response"]["success"],
         statusCode: result["response"]["statusCode"],

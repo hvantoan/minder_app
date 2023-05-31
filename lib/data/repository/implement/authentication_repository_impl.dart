@@ -73,9 +73,9 @@ class AuthenticationRepository implements AuthenticationRepositoryInterface {
   }
 
   @override
-  Future<Either<Failures, void>> verify(String otp) async {
+  Future<Either<Failures, void>> verify(String otp, String email) async {
     try {
-      await OtpAPI().verify(otp);
+      await OtpAPI().verify(otp, email);
       return const Right(null);
     } catch (e) {
       if (e is IncorresctOTPException) {

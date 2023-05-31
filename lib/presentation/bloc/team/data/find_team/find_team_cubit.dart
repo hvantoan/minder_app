@@ -22,7 +22,7 @@ class FindTeamCubit extends Cubit<FindTeamState> {
       return;
     }
 
-    final myTeams = await TeamUseCase().getTeams(isMyTeam: true);
+    // final myTeams = await TeamUseCase().getTeams(isMyTeam: true);
     if (inviteTeams.isLeft) {
       emit(FindTeamFailure(message: S.current.txt_data_parsing_failed));
       return;

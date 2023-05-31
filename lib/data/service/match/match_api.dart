@@ -31,7 +31,7 @@ class MatchAPI {
     bool hasInvite,
   ) async {
     try {
-      final BaseResponse response = await BaseAPIService.post(
+      await BaseAPIService.post(
           uri: "${ServicePath.matches}/${ServicePath.swipe}",
           withToken: true,
           params: {
@@ -62,7 +62,7 @@ class MatchAPI {
   Future<void> selectTime(String matchId, num dayOfWeek, TimeOption timeOption,
       String teamId) async {
     try {
-      final BaseResponse response = await BaseAPIService.post(
+      await BaseAPIService.post(
         uri: "${ServicePath.matches}/$matchId/${ServicePath.selectTime}",
         withToken: true,
         params: {
@@ -80,7 +80,7 @@ class MatchAPI {
   Future<void> selectStadium(
       String matchId, String stadiumId, String teamId) async {
     try {
-      final BaseResponse response = await BaseAPIService.post(
+      await BaseAPIService.post(
         uri: "${ServicePath.matches}/$matchId/${ServicePath.selectStadium}",
         withToken: true,
         params: {
@@ -95,7 +95,7 @@ class MatchAPI {
 
   Future<void> check(String matchId) async {
     try {
-      final BaseResponse response = await BaseAPIService.get(
+      await BaseAPIService.get(
         uri: "${ServicePath.matches}/$matchId/${ServicePath.check}",
         withToken: true,
       );

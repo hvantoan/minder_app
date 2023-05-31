@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:minder/domain/entity/team/team.dart';
 import 'package:minder/generated/l10n.dart';
-import 'package:minder/presentation/bloc/user/user_cubit.dart';
 import 'package:minder/presentation/page/customer/team/my_team/member_profile_page.dart';
 import 'package:minder/presentation/widget/button/button_widget.dart';
-import 'package:minder/presentation/widget/common/exception_widget.dart';
 import 'package:minder/presentation/widget/sheet/sheet_widget.dart';
 import 'package:minder/presentation/widget/tile/tile_widget.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
-import 'package:minder/util/constant/path/image_path.dart';
 
 class MemberInfoPage extends StatelessWidget {
   final Member member;

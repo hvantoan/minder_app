@@ -45,7 +45,18 @@ class AvatarWidget {
                     border: Border.all(color: BaseColor.grey200)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(largeAvatarSize),
-                  child: Image.network(imagePath, fit: BoxFit.cover),
+                  child: Image.network(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      return const Padding(
+                        padding: EdgeInsets.all(4),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
           ],

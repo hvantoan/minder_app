@@ -1,6 +1,5 @@
 import 'package:minder/data/model/match/match_model.dart';
 import 'package:minder/domain/entity/stadium/stadium.dart';
-import 'package:minder/domain/entity/team/team.dart';
 
 class Match {
   String? id;

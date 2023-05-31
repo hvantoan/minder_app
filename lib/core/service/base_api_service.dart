@@ -29,6 +29,7 @@ class BaseAPIService {
       required Map<String, dynamic> params,
       bool withToken = true}) async {
     try {
+      print("\nEnpoint:$uri");
       final client = http.Client();
       Future.delayed(ServiceConstant.apiWaitingDuration)
           .whenComplete(() => client.close());
@@ -50,6 +51,7 @@ class BaseAPIService {
   static Future<BaseResponse> get(
       {required String uri, bool withToken = true}) async {
     try {
+      print("\nEnpoint:$uri");
       final client = http.Client();
       Future.delayed(ServiceConstant.apiWaitingDuration)
           .whenComplete(() => client.close());

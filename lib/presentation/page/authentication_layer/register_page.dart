@@ -188,7 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget buildTopArea() {
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 48),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Image.asset(
         ImagePath.appIcon,
         width: appIconWidth,

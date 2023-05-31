@@ -29,7 +29,6 @@ class AuthenticationLayerCubit extends Cubit<AuthenticationLayerState> {
   }
 
   Future<void> clearAuthenticationData() async {
-    // TODO: Clear all
     TokenHelper.removeToken();
   }
 }

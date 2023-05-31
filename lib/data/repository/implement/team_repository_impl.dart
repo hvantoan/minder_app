@@ -7,7 +7,6 @@ import 'package:minder/core/failures/team_failures.dart';
 import 'package:minder/data/repository/implement/user_repository_impl.dart';
 import 'package:minder/data/repository/interface/i_team_repository.dart';
 import 'package:minder/data/service/team/team_api.dart';
-import 'package:minder/data/service/user/user_api.dart';
 import 'package:minder/domain/entity/invite/invite.dart';
 import 'package:minder/domain/entity/team/team.dart';
 import 'package:minder/domain/entity/user/user.dart';

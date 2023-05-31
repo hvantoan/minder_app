@@ -24,8 +24,7 @@ class MatchRepository extends MatchRepositoryInterface {
   Future<Either<Failures, void>> swipe(
       String hostTeamId, String opposingTeamId, bool hasInvite) async {
     try {
-      final response =
-          await MatchAPI().swipe(hostTeamId, opposingTeamId, hasInvite);
+      await MatchAPI().swipe(hostTeamId, opposingTeamId, hasInvite);
       return const Right(null);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));
@@ -46,8 +45,7 @@ class MatchRepository extends MatchRepositoryInterface {
   Future<Either<Failures, void>> selectStadium(
       String matchId, String stadiumId, String teamId) async {
     try {
-      final response =
-          await MatchAPI().selectStadium(matchId, stadiumId, teamId);
+      await MatchAPI().selectStadium(matchId, stadiumId, teamId);
       return const Right(null);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));
@@ -58,8 +56,7 @@ class MatchRepository extends MatchRepositoryInterface {
   Future<Either<Failures, void>> selectTime(String matchId, num dayOfWeek,
       match.TimeOption timeOption, String teamId) async {
     try {
-      final response =
-          await MatchAPI().selectTime(matchId, dayOfWeek, timeOption, teamId);
+      await MatchAPI().selectTime(matchId, dayOfWeek, timeOption, teamId);
       return const Right(null);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));
@@ -69,7 +66,7 @@ class MatchRepository extends MatchRepositoryInterface {
   @override
   Future<Either<Failures, void>> check(String matchId) async {
     try {
-      final response = await MatchAPI().check(matchId);
+      await MatchAPI().check(matchId);
       return const Right(null);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));

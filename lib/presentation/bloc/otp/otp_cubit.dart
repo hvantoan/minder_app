@@ -33,9 +33,10 @@ class OTPCubit extends Cubit<OTPState> {
   Future<void> verifyOTP({
     required BuildContext context,
     required String otp,
+    required String email,
   }) async {
     Either<Failures, void> verifyRepository =
-        await AuthenticationUseCase().verify(otp);
+        await AuthenticationUseCase().verify(otp, email);
     if (verifyRepository.isLeft) {
       if (verifyRepository.left is IncorresctOTPFailures) {
         emit(UnmatchedOTPState());

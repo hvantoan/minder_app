@@ -14,12 +14,12 @@ class DebugData {
 
   /// Test Account
   static LoginModel debugAccount =
-      LoginModel("toan01473@gmail.com", "12345678");
+      LoginModel("it.vantoan@gmail.com", "12345678");
 
   /// Test register Account
   static RegisterModel debugRegisterAccount = RegisterModel(
     "Văn Toàn",
-    "toan01473@gmail.com",
+    "toan285770338@gmail.com",
     "12345678",
     "0336516906",
   );

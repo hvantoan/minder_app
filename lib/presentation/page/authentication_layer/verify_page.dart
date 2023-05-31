@@ -193,7 +193,11 @@ class _VerifyPageState extends State<VerifyPage> {
               turnOnLoading();
               GetIt.instance
                   .get<OTPCubit>()
-                  .verifyOTP(context: context, otp: _otp)
+                  .verifyOTP(
+                    context: context,
+                    otp: _otp,
+                    email: widget.username,
+                  )
                   .then((_) => turnOffLoading());
             },
             onChanged: (value) {},

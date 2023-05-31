@@ -5,10 +5,10 @@ import 'package:minder/core/service/base_response.dart';
 import 'package:minder/util/constant/path/service_path.dart';
 
 class OtpAPI {
-  Future<void> verify(String otp) async {
+  Future<void> verify(String otp, String email) async {
     try {
       final BaseResponse response = await BaseAPIService.get(
-          uri: "${ServicePath.verify}?otp=$otp", withToken: false);
+          uri: "${ServicePath.verify}?otp=$otp&email=$email", withToken: false);
       if (response.isSuccess) return;
       switch (response.statusCode) {
         case 5:

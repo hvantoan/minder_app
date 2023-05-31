@@ -10,7 +10,7 @@ abstract class AuthenticationRepositoryInterface {
 
   Future<Either<Failures, void>> register(RegisterModel registerModel);
 
-  Future<Either<Failures, void>> verify(String otp);
+  Future<Either<Failures, void>> verify(String otp, String email);
 
   Future<Either<Failures, void>> resendOTP(String username);
 }

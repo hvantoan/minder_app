@@ -281,7 +281,7 @@ class TeamAPI {
       required String userId,
       required bool hasInvite}) async {
     try {
-      final BaseResponse response = await BaseAPIService.post(
+      await BaseAPIService.post(
           uri: "${ServicePath.invites}/${ServicePath.swipe}",
           withToken: true,
           params: {"teamId": teamId, "userId": userId, "hasInvite": hasInvite});

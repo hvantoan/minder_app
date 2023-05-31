@@ -14,11 +14,9 @@ import 'package:minder/presentation/widget/rank/rank.dart';
 import 'package:minder/presentation/widget/text/text_widget.dart';
 import 'package:minder/presentation/widget/tile/tile_widget.dart';
 import 'package:minder/util/constant/enum/gender_enum.dart';
-import 'package:minder/util/constant/enum/position_enum.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
 import 'package:minder/util/constant/path/image_path.dart';
 import 'package:minder/util/helper/gender_helper.dart';
-import 'package:minder/util/helper/position_helper.dart';
 import 'package:minder/util/style/base_style.dart';
 
 const double _coverHeight = 180.0;
@@ -37,7 +35,6 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
 
   @override
   void initState() {
-    GetIt.instance.get<UserCubit>().getMe();
     GetIt.instance.get<FileControllerCubit>().stream.listen((event) async {
       if (!mounted) return;
       if (event is FileControllerSuccess) {

@@ -35,13 +35,13 @@ class Message {
 
   toDisplayTime() {
     DateFormat dateFormat = DateFormat("HH:mm");
-    return dateFormat.format(createAt);
+    return dateFormat.format(createAt.toLocal());
   }
 
   toDisplayTimeLine() {
     DateFormat dateFormat = DateFormat("dd/MM/yyyy");
     var dow = createAt.weekday == 1 ? "CN" : "T${createAt.weekday}";
-    return "$dow , ${dateFormat.format(createAt)}";
+    return "$dow , ${dateFormat.format(createAt.toLocal())}";
   }
 
   Message.fromModel(MessageModel messageModel) {

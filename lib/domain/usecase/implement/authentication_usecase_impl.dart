@@ -31,9 +31,9 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
   }
 
   @override
-  Future<Either<Failures, void>> verify(String otp) async {
+  Future<Either<Failures, void>> verify(String otp, String email) async {
     Either<Failures, void> verify =
-        await AuthenticationRepository().verify(otp);
+        await AuthenticationRepository().verify(otp, email);
     if (verify.isLeft) return Left(verify.left);
     return const Right(null);
   }

@@ -20,7 +20,7 @@ class TeamChatPage extends StatefulWidget {
 class _TeamChatPageState extends State<TeamChatPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 250,
       child: ConversationPage(
         appBarDisplay: false,

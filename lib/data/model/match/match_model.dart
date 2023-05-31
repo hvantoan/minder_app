@@ -1,5 +1,4 @@
 import 'package:minder/data/model/personal/stadium_model.dart';
-import 'package:minder/data/model/personal/team_model.dart';
 
 class MatchModel {
   String? id;
@@ -72,7 +71,9 @@ class MatchTeamModel {
       this.opposingMatch,
       this.stadium,
       this.teamName,
-      this.avatar, this.latitude, this.longitude);
+      this.avatar,
+      this.latitude,
+      this.longitude);
 
   MatchTeamModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
