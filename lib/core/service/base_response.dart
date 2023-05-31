@@ -30,7 +30,7 @@ class BaseResponse {
       }
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
-      debugPrint(result.toString());
+      //   debugPrint(result.toString());
       return BaseResponse(
         isSuccess: result["response"]["success"],
         statusCode: result["response"]["statusCode"],

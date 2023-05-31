@@ -54,10 +54,10 @@ class TeamWidget {
                   const SizedBox(
                     width: 4.0,
                   ),
-                    Text(
-                      team.owner!,
-                      style: BaseTextStyle.caption(color: BaseColor.grey900),
-                    ),
+                  Text(
+                    team.owner ?? "",
+                    style: BaseTextStyle.caption(color: BaseColor.grey900),
+                  ),
                 ],
               ),
             ],
