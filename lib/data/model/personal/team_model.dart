@@ -9,6 +9,7 @@ class TeamModel {
       this.regency,
       this.createAt,
       this.description,
+      this.owner,
       this.avatar,
       this.cover,
       this.gameSettingModel,
@@ -21,6 +22,7 @@ class TeamModel {
   bool? isAutoTime;
   String? groupId;
   int? regency;
+  String? owner;
   String? createAt;
   String? description;
   String? avatar;
@@ -37,6 +39,7 @@ class TeamModel {
     isAutoTime = json["isAutoTime"];
     isAutoLocation = json["isAutoLocation"];
     avatar = json["avatar"];
+    owner  = json["owner"];
     description = json["description"];
     cover = json["cover"];
     groupId = json["groupId"];
@@ -56,19 +59,16 @@ class MemberModel {
   late String userId;
   late String teamId;
   late int regency;
-  UserModel? userModel;
+  UserModel? user;
 
-  MemberModel(
-      {required this.id,
-      required this.userId,
-      required this.teamId,
-      required this.regency,
-      this.userModel});
+
+  MemberModel({required this.id, required this.userId, required this.teamId, required this.regency, this.user});
 
   MemberModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     userId = json["userId"];
     teamId = json["teamId"];
     regency = json["regency"];
+    user = json["user"]!=null? UserModel.fromJson(json["user"]):null;
   }
 }

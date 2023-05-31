@@ -11,8 +11,6 @@ class Match {
   int? teamSide;
   MatchTeam? hostTeam;
   MatchTeam? opposingTeam;
-  Team? opposite;
-  Team? host;
   List<TimeChoice>? timeChoices;
 
   Match(
@@ -39,10 +37,6 @@ class Match {
     opposingTeam = matchModel.opposingTeam != null
         ? MatchTeam.fromModel(matchModel.opposingTeam!)
         : null;
-    opposite = matchModel.opposite != null
-        ? Team.fromModel(matchModel.opposite!)
-        : null;
-    host = matchModel.host != null ? Team.fromModel(matchModel.host!) : null;
     timeChoices =
         matchModel.timeChoices!.map((e) => TimeChoice.fromModel(e)).toList();
   }
@@ -59,7 +53,10 @@ class MatchTeam {
   String? hostMatch;
   String? opposingMatch;
   Stadium? stadium;
-  Team? team;
+  String? teamName;
+  String? avatar;
+  double? latitude;
+  double? longitude;
 
   MatchTeam(
       this.id,
@@ -71,8 +68,7 @@ class MatchTeam {
       this.date,
       this.hostMatch,
       this.opposingMatch,
-      this.stadium,
-      this.team);
+      this.stadium, this.teamName, this.avatar, this.latitude, this.longitude);
 
   MatchTeam.fromModel(MatchTeamModel matchTeamModel) {
     id = matchTeamModel.id;
@@ -85,9 +81,10 @@ class MatchTeam {
     stadium = matchTeamModel.stadium != null
         ? Stadium.fromModel(matchTeamModel.stadium!)
         : null;
-    team = matchTeamModel.team != null
-        ? Team.fromModel(matchTeamModel.team!)
-        : null;
+    teamName = matchTeamModel.teamName;
+    avatar = matchTeamModel.avatar;
+    latitude = matchTeamModel.latitude;
+    longitude = matchTeamModel.longitude;
   }
 }
 

@@ -33,50 +33,37 @@ class MemberInfoPage extends StatelessWidget {
           onSubmit: () {
             Navigator.pop(context);
           }),
-      BlocBuilder<UserCubit, UserState>(
-        bloc: GetIt.instance.get<UserCubit>()..getMe(),
-        builder: (context, state) {
-          if (state is UserSuccess) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                  top: 16, bottom: 32, left: 16, right: 16.0),
-              child: Column(
-                children: [
-                  TileWidget.common(
-                      title: member.user!.phone!,
-                      isDirector: false,
-                      iconPath: IconPath.phoneLine),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12.0, bottom: 16.0),
-                    child: TileWidget.common(
-                        title: member.user!.username!,
-                        isDirector: false,
-                        iconPath: IconPath.mailLine),
-                  ),
-                  ButtonWidget.secondary(
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MemberProfilePage(
-                                      me: me,
-                                      member: member,
-                                    )));
-                      },
-                      content: S.current.btn_view_profile)
-                ],
-              ),
-            );
-          }
-          return ExceptionWidget(
-            subContent: S.current.txt_data_parsing_failed,
-            imagePath: ImagePath.dataParsingFailed,
-            buttonContent: S.current.btn_try_again,
-            onButtonTap: () => GetIt.instance.get<UserCubit>().getMe(),
-          );
-        },
-      ),
+      SingleChildScrollView(
+        padding: const EdgeInsets.only(
+            top: 16, bottom: 32, left: 16, right: 16.0),
+        child: Column(
+          children: [
+            TileWidget.common(
+                title: member.user!.phone!,
+                isDirector: false,
+                iconPath: IconPath.phoneLine),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0, bottom: 16.0),
+              child: TileWidget.common(
+                  title: member.user!.username!,
+                  isDirector: false,
+                  iconPath: IconPath.mailLine),
+            ),
+            ButtonWidget.secondary(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MemberProfilePage(
+                            me: me,
+                            member: member,
+                          )));
+                },
+                content: S.current.btn_view_profile)
+          ],
+        ),
+      )
     ]);
   }
 }

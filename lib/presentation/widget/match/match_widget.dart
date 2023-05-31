@@ -34,19 +34,19 @@ class MatchWidget {
           children: [
             AvatarWidget.base(
                 imagePath: match.teamSide == 1
-                    ? match.opposite!.avatar
-                    : match.host!.avatar,
+                    ? match.opposingTeam!.avatar
+                    : match.hostTeam!.avatar,
                 name: match.teamSide == 1
-                    ? match.opposite!.name
-                    : match.host!.name,
+                    ? match.opposingTeam!.teamName!
+                    : match.hostTeam!.teamName!,
                 size: mediumAvatarSize),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: mediumPadding),
                 child: Text(
                     match.teamSide == 1
-                        ? match.opposite!.name
-                        : match.host!.name,
+                        ? match.opposingTeam!.teamName!
+                        : match.hostTeam!.teamName!,
                     style: BaseTextStyle.label()),
               ),
             ),
