@@ -86,8 +86,8 @@ class TeamUseCase extends TeamUseCaseInterface {
   @override
   Future<Either<Failures, void>> join(
       {required String teamId, String? userId}) async {
-    final response = await TeamRepository()
-        .join(teamId: teamId, userId: userId);
+    final response =
+        await TeamRepository().join(teamId: teamId, userId: userId);
     if (response.isLeft) {
       return Left(response.left);
     }
@@ -127,7 +127,8 @@ class TeamUseCase extends TeamUseCaseInterface {
   }
 
   @override
-  Future<Either<Failures, List<User>>> getSuggest({required String teamId}) async {
+  Future<Either<Failures, List<User>>> getSuggest(
+      {required String teamId}) async {
     final response = await TeamRepository().getSuggest(teamId: teamId);
     if (response.isLeft) {
       return Left(response.left);
@@ -136,8 +137,12 @@ class TeamUseCase extends TeamUseCaseInterface {
   }
 
   @override
-  Future<Either<Failures, void>> inviteUser({required String teamId, required String userId, required bool hasInvite}) async {
-    final response = await TeamRepository().inviteUser(teamId: teamId, userId: userId, hasInvite: hasInvite);
+  Future<Either<Failures, void>> inviteUser(
+      {required String teamId,
+      required String userId,
+      required bool hasInvite}) async {
+    final response = await TeamRepository()
+        .inviteUser(teamId: teamId, userId: userId, hasInvite: hasInvite);
     if (response.isLeft) {
       return Left(response.left);
     }
@@ -145,7 +150,8 @@ class TeamUseCase extends TeamUseCaseInterface {
   }
 
   @override
-  Future<Either<Failures, List<Team>>> getSuggestTeam({required String teamId}) async {
+  Future<Either<Failures, List<Team>>> getSuggestTeam(
+      {required String teamId}) async {
     final response = await TeamRepository().getSuggestTeam(teamId: teamId);
     if (response.isLeft) {
       return Left(response.left);

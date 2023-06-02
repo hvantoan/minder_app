@@ -33,7 +33,7 @@ class _GroupPageState extends State<GroupPage> {
             body: ListView.builder(
               shrinkWrap: true,
               itemCount: groups.length,
-              itemBuilder: (context, index) => _group(groups[0]),
+              itemBuilder: (context, index) => _group(groups[index ]),
             ),
           ),
         );

@@ -75,8 +75,8 @@ class TeamWidget {
   static card({required Team team, bool isMatch = false}) {
     String? address;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      if (team.gameSetting!.latitude!.floorToDouble() != 0 ||
-          team.gameSetting!.longitude!.floorToDouble() != 0) {
+      if ((team.gameSetting?.latitude?.floorToDouble() ?? 0) != 0 ||
+          (team.gameSetting?.longitude?.floorToDouble() ?? 0) != 0) {
         address = await LocationHelper.address(LatLng(
             team.gameSetting!.latitude!.toDouble(),
             team.gameSetting!.longitude!.toDouble()));
@@ -153,11 +153,18 @@ class TeamWidget {
                 ),
                 _label(S.current.lbl_match_type),
                 Text(
-                  team.gameSetting!.gameTypes!.join("/"),
+                  team.gameSetting?.gameTypes?.join("/") ??
+                      S.current.txt_no_match_type,
                   style: BaseTextStyle.body1(),
                 ),
                 _label(S.current.lbl_playing_times),
-                TimeHelper.mapTimeToWidget(team.gameSetting!.gameTime!)
+                if (team.gameSetting?.gameTime != null)
+                  TimeHelper.mapTimeToWidget(team.gameSetting!.gameTime!)
+                else
+                  Text(
+                    S.current.txt_no_playing_time,
+                    style: BaseTextStyle.body1(),
+                  ),
               ],
             ),
           )

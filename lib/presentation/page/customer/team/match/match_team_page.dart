@@ -5,6 +5,7 @@ import 'package:minder/domain/entity/team/team.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/match/controller/match_controller_cubit.dart';
 import 'package:minder/presentation/bloc/match/data/matches/matches_cubit.dart';
+import 'package:minder/presentation/bloc/team/data/find_team/find_team_cubit.dart';
 import 'package:minder/presentation/page/customer/team/match/swipe_match_team_page.dart';
 import 'package:minder/presentation/widget/button/button_widget.dart';
 import 'package:minder/presentation/widget/common/exception_widget.dart';
@@ -69,7 +70,7 @@ class _MatchTeamPageState extends State<MatchTeamPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: ButtonWidget.primaryWhite(
-                        onTap: () => findMoreTeams(state.teams),
+                        onTap: () => findMoreTeams(),
                         content: S.current.btn_find_more_teams,
                         prefixIconPath: IconPath.searchLine),
                   ),
@@ -129,14 +130,29 @@ class _MatchTeamPageState extends State<MatchTeamPage> {
     );
   }
 
-  void findMoreTeams(List<Team> teams) {
+  void findMoreTeams() {
+    GetIt.instance.get<FindTeamCubit>().getTeams(teamId: widget.team.id);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FindMoreTeamPage(
-                teams: teams,
-                cancel: (team) => swipe(false, team),
-                confirm: (team) => swipe(true, team))));
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocBuilder<FindTeamCubit, FindTeamState>(
+          builder: (context, state) {
+            if (state is FindTeamSuccess) {
+              return FindMoreTeamPage(
+                  teams: state.suggest,
+                  cancel: (team) => swipe(false, team),
+                  confirm: (team) => swipe(true, team));
+            }
+
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   void swipe(bool hasInvite, Team team) {

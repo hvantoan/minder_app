@@ -223,5 +223,7 @@
   "txt_cant_leave": "You are the owner, so you can't leave the team",
   "lbl_groups": "Groups",
   "lbl_chat": "Chat",
-  "txt_no_message": "No message in Conversation."
+  "txt_no_message": "No message in Conversation.",
+  "txt_no_match_type": "There is no match type",
+  "txt_no_playing_time": "There is no playing time"
 }

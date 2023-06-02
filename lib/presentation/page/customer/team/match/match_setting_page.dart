@@ -213,8 +213,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
                                     children: [
                                       if (host!.stadium != null)
                                         GestureDetector(
-                                          onTap: () =>
-                                              selectStadium(host),
+                                          onTap: () => selectStadium(host),
                                           child: Container(
                                             color: Colors.transparent,
                                             child: Row(
@@ -278,8 +277,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
                                         )
                                       else
                                         ButtonWidget.primaryWhite(
-                                            onTap: () =>
-                                                selectStadium(host),
+                                            onTap: () => selectStadium(host),
                                             content:
                                                 S.current.btn_select_stadium),
                                       ListView.builder(
@@ -519,14 +517,16 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
         isExpand: true,
         body: SelectStadiumPage(
           stadium: team.stadium,
-          latLng: LatLng(team.latitude!,
-              team.longitude!),
+          latLng: LatLng(team.latitude!, team.longitude!),
         ));
     if (result != null) {
       if (mounted) GetIt.instance.get<LoadingCoverController>().on(context);
       GetIt.instance
           .get<MatchControllerCubit>()
-          .selectStadium(widget.match.id!, result, team.teamId!).then((value) =>     GetIt.instance.get<MatchControllerCubit>().check(widget.match.id!));
+          .selectStadium(widget.match.id!, result, team.teamId!)
+          .then((value) => GetIt.instance
+              .get<MatchControllerCubit>()
+              .check(widget.match.id!));
     }
   }
 

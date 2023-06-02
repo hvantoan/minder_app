@@ -99,7 +99,7 @@ class _ChatInputState extends State<ChatInput> {
               child: Column(children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: Row(children: [
                     GestureDetector(
                       onTap: () {
@@ -139,10 +139,10 @@ class _ChatInputState extends State<ChatInput> {
                           counterText: "",
                           fillColor: BaseColor.grey100,
                           filled: true,
+                          isDense: true,
                           hintText: S.current.txt_write_something,
                           hintStyle: BaseTextStyle.body2(),
-                          contentPadding: const EdgeInsets.only(
-                              top: 8.0, bottom: 8.0, left: 16, right: 16),
+                          contentPadding: const EdgeInsets.all(8),
                           suffixIcon: IconButton(
                             onPressed: () {
                               if (_focusNode.hasFocus) {
@@ -156,17 +156,17 @@ class _ChatInputState extends State<ChatInput> {
                                 color: BaseColor.grey300),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(32),
+                            borderRadius: BorderRadius.circular(16),
                             borderSide: const BorderSide(
                                 color: BaseColor.grey100, width: 1),
                           ),
                           disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(32),
+                            borderRadius: BorderRadius.circular(16),
                             borderSide: const BorderSide(
                                 color: BaseColor.grey100, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(32),
+                            borderRadius: BorderRadius.circular(16),
                             borderSide: const BorderSide(
                                 color: BaseColor.grey100, width: 1.0),
                           ),
@@ -180,8 +180,8 @@ class _ChatInputState extends State<ChatInput> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8),
-                        width: 32,
-                        height: 32,
+                        width: 28,
+                        height: 28,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: !_hasSend ? BaseColor.grey100 : null,

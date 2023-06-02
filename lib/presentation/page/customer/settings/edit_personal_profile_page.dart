@@ -184,7 +184,7 @@ class _EditPersonalProfilePageState extends State<EditPersonalProfilePage> {
               dob: user.dayOfBirth,
               onSuccess: (value) {
                 if (value == null) return;
-                setState(() => user.dayOfBirth = value.toUtc());
+                setState(() => user.dayOfBirth = value.toLocal());
               },
             );
           },

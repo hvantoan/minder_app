@@ -134,12 +134,14 @@ class _FindTeamPageState extends State<FindTeamPage> {
                           invites.remove(invite);
                           invites.insert(0, invite);
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => InvitePage(
-                                        invites: invites,
-                                        myTeamId: widget.myTeamId,
-                                      )));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InvitePage(
+                                invites: invites,
+                                myTeamId: widget.myTeamId,
+                              ),
+                            ),
+                          );
                         },
                       );
                     }),
