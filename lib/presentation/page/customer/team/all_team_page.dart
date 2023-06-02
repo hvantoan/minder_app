@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -43,27 +41,25 @@ class _AllTeamPageState extends State<AllTeamPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(body: BlocBuilder<TeamsCubit, TeamsState>(
-        builder: (context, state) {
-          if (state is TeamsSuccessState) {
-            if (state.teams.isNotEmpty) {
-              return _listState(teams: state.teams);
-            }
-            return _emptyState();
+    return Scaffold(body: BlocBuilder<TeamsCubit, TeamsState>(
+      builder: (context, state) {
+        if (state is TeamsSuccessState) {
+          if (state.teams.isNotEmpty) {
+            return _listState(teams: state.teams);
           }
-          if (state is TeamsErrorState) {
-            return ExceptionWidget(
-              subContent: state.message,
-              imagePath: ImagePath.dataParsingFailed,
-              buttonContent: S.current.btn_try_again,
-              onButtonTap: () => GetIt.instance.get<TeamsCubit>().getTeams(),
-            );
-          }
-          return _shimmer();
-        },
-      )),
-    );
+          return _emptyState();
+        }
+        if (state is TeamsErrorState) {
+          return ExceptionWidget(
+            subContent: state.message,
+            imagePath: ImagePath.dataParsingFailed,
+            buttonContent: S.current.btn_try_again,
+            onButtonTap: () => GetIt.instance.get<TeamsCubit>().getTeams(),
+          );
+        }
+        return _shimmer();
+      },
+    ));
   }
 
   Widget _emptyState() {

@@ -225,6 +225,7 @@ class TeamControllerCubit extends Cubit<TeamControllerState> {
     }
 
     emit(TeamControllerSuccessState());
+    
   }
 
   void clear() {

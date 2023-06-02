@@ -65,7 +65,6 @@ class _LanguageSettingState extends State<LanguageSetting> {
                 onIndexChange: (value) {
                   setState(() {
                     widget.languageKey = value;
-                    widget.onSuccess(widget.languageKey);
                   });
                 },
                 key: widget.languageKey,

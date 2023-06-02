@@ -5,8 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:minder/data/model/personal/user_dto.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/authentication_layer/authentication_layer_cubit.dart';
+import 'package:minder/presentation/bloc/base_layer/base_layer_cubit.dart';
 import 'package:minder/presentation/bloc/user/user_cubit.dart';
-import 'package:minder/presentation/page/customer/settings/change_language_page.dart';
 import 'package:minder/presentation/page/customer/settings/personal_playing_area_page.dart';
 import 'package:minder/presentation/page/customer/settings/personal_playing_time_page.dart';
 import 'package:minder/presentation/page/customer/settings/personal_profile_page.dart';
@@ -14,7 +14,6 @@ import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/presentation/widget/bottom_navigation/customer_bottom_navigation.dart';
 import 'package:minder/presentation/widget/bottom_sheet_component/bottom_sheet_components.dart';
 import 'package:minder/presentation/widget/button/button_widget.dart';
-import 'package:minder/presentation/widget/sheet/sheet_widget.dart';
 import 'package:minder/presentation/widget/tile/tile_widget.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
 import 'package:minder/util/style/base_style.dart';
@@ -127,10 +126,11 @@ class _PersonalSettingsPageState extends State<PersonalSettingsPage> {
             );
           },
           child: TileWidget.common(
-              title: S.current.lbl_stadium_type,
-              iconPath: IconPath.playgroundLine,
-              trailing: displayGameType,
-              isDirector: false),
+            title: S.current.lbl_stadium_type,
+            iconPath: IconPath.playgroundLine,
+            trailing: displayGameType,
+            isDirector: false,
+          ),
         ),
         const SizedBox(height: 16),
         TileWidget.common(
@@ -139,10 +139,12 @@ class _PersonalSettingsPageState extends State<PersonalSettingsPage> {
               if (isAllow) {
                 if (mounted) {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              PersonalPlayingAreaPage(uid: user.id!)));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PersonalPlayingAreaPage(uid: user.id!),
+                    ),
+                  );
                 }
               }
             },
@@ -173,8 +175,10 @@ class _PersonalSettingsPageState extends State<PersonalSettingsPage> {
             iconPath: IconPath.notificationLine),
         const SizedBox(height: 16),
         GestureDetector(
-          onTap: () => SheetWidget.base(
-              context: context, body: const ChangeLanguagePage()),
+          onTap: () => BottomSheetComponents.settingLanguage(
+              context: context,
+              onSuccess: (value) =>
+                  changeLanguage(context: context, key: value)),
           child: TileWidget.common(
             title: S.current.lbl_language,
             iconPath: IconPath.earthLine,
@@ -236,5 +240,13 @@ class _PersonalSettingsPageState extends State<PersonalSettingsPage> {
       return true;
     }
     return false;
+  }
+
+  Future<void> changeLanguage(
+      {required BuildContext context, String? key}) async {
+    await GetIt.instance
+        .get<BaseLayerCubit>()
+        .changeLanguage(context: context, languageKey: key);
+    setState(() {});
   }
 }

@@ -6,8 +6,6 @@ import 'package:minder/util/helper/language_helper.dart';
 part 'base_layer_state.dart';
 
 class BaseLayerCubit extends Cubit<BaseLayerState> {
-  /// This is the first cubit of project.
-  /// It handle network app language.
   BaseLayerCubit() : super(BaseLayerInitialState()) {
     setupLanguage();
   }

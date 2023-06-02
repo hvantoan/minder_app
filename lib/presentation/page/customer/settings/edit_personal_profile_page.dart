@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -69,7 +68,6 @@ class _EditPersonalProfilePageState extends State<EditPersonalProfilePage> {
       if (state is UserSuccess) {
         user = state.user!;
         selectedPosition.clear();
-        if (user.gameSetting != null && user.gameSetting!.positions != null) {}
         selectedPosition.addAll(user.gameSetting!.positions!
             .map((e) => Position.values.elementAt(e))
             .toList());
@@ -99,6 +97,7 @@ class _EditPersonalProfilePageState extends State<EditPersonalProfilePage> {
                   GetIt.instance.get<LoadingCoverController>().on(context);
                   GetIt.instance.get<UserCubit>().updateMe(user).then((value) {
                     GetIt.instance.get<LoadingCoverController>().off(context);
+                    GetIt.instance.get<UserCubit>().getMe();
                     Navigator.of(context).pop();
                   });
                 },

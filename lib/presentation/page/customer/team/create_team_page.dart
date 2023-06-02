@@ -128,8 +128,10 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     return AppBar(
       backgroundColor: Colors.white,
       leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: BaseIcon.base(IconPath.arrowLeftLine)),
+        onPressed: () => Navigator.pop(context),
+        icon: BaseIcon.base(IconPath.arrowLeftLine),
+      ),
+      shadowColor: BaseColor.grey500.withOpacity(0.08),
       title: Text(
         S.current.lbl_create_team,
         style: BaseTextStyle.label(),
@@ -249,11 +251,12 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     clearError();
     unFocus();
     GetIt.instance.get<TeamControllerCubit>().createTeam(
-        name: nameController.text,
-        code: codeController.text,
-        level: currentRate,
-        description: descriptionController.text,
-        stadiumType: stadiumTypes);
+          name: nameController.text,
+          code: codeController.text,
+          level: currentRate,
+          description: descriptionController.text,
+          stadiumType: stadiumTypes,
+        );
   }
 
   void selectStadiumType() async {
