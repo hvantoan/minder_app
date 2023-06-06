@@ -6,7 +6,7 @@ import 'package:minder/data/model/personal/user_dto.dart' as dto;
 import 'package:minder/domain/entity/user/user.dart';
 
 abstract class UserRepositoryInterface {
-  Future<Either<Failures, List<User>>> getUsers({List<String>? userIds});
+  Future<List<User>> getUsers({List<String>? userIds});
 
   Future<Either<Failures, User>> getMe();
 

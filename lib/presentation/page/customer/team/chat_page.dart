@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:minder/domain/entity/group/group.dart';
-import 'package:minder/presentation/page/customer/home/comversation_page.dart';
+import 'package:minder/presentation/page/customer/home/conversation_page.dart';
 
 class TeamChatPage extends StatefulWidget {
-  const TeamChatPage(
-      {super.key,
-      required this.group,
-      required this.height,
-      required this.appBarDisplay});
+  const TeamChatPage({
+    super.key,
+    required this.group,
+    required this.height,
+    required this.appBarDisplay,
+  });
 
   final double height;
   final Group group;

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:minder/core/failures/common_failures.dart';
@@ -16,36 +17,25 @@ part 'team_controller_state.dart';
 class TeamControllerCubit extends Cubit<TeamControllerState> {
   TeamControllerCubit() : super(TeamControllerInitial());
 
-  Future<void> createTeam(
-      {required String name,
-      required String code,
-      required int level,
-      required List<StadiumType> stadiumType,
-      String? description}) async {
+  Future<void> createTeam({
+    required String name,
+    required String code,
+    required int level,
+    String? description,
+    required List<StadiumType> stadiumType,
+    File? avatarData,
+    File? coverData,
+  }) async {
     final response = await TeamUseCase().createTeam(
         name: name,
         code: code,
         level: level,
+        coverData: coverData,
+        avatarData: avatarData,
         stadiumType: stadiumType
             .map((e) => StadiumTypeHelper.mapEnumToInt(stadiumType: e))
             .toList());
     if (response.isLeft) {
-      if (response.left is EmptyTeamNameFailures) {
-        emit(TeamControllerNameEmptyState());
-        return;
-      }
-      if (response.left is EmptyTeamCodeFailures) {
-        emit(TeamControllerCodeEmptyState());
-        return;
-      }
-      if (response.left is EmptyTeamTypeFailures) {
-        emit(TeamControllerStadiumTypeEmptyState());
-        return;
-      }
-      if (response.left is TeamCodeExistFailures) {
-        emit(TeamControllerCodeExistState());
-        return;
-      }
       if (response.left is HaveTeamFailures) {
         emit(TeamControllerHaveTeamState());
         return;
@@ -58,8 +48,9 @@ class TeamControllerCubit extends Cubit<TeamControllerState> {
       emit(
           TeamControllerErrorState(message: S.current.txt_data_parsing_failed));
       return;
+    } else {
+      emit(TeamControllerSuccessState(id: response.right));
     }
-    emit(TeamControllerSuccessState(id: response.right));
   }
 
   Future<void> updateTeam(
@@ -225,7 +216,6 @@ class TeamControllerCubit extends Cubit<TeamControllerState> {
     }
 
     emit(TeamControllerSuccessState());
-    
   }
 
   void clear() {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 // ignore: implementation_imports
 import 'package:either_dart/src/either.dart';
@@ -24,9 +26,16 @@ class TeamUseCase extends TeamUseCaseInterface {
       required String code,
       required int level,
       required List<int> stadiumType,
+      File? avatarData,
+      File? coverData,
       String? description}) async {
     final response = await TeamRepository().createTeam(
-        name: name, code: code, level: level, stadiumType: stadiumType);
+        name: name,
+        code: code,
+        level: level,
+        stadiumType: stadiumType,
+        avatarData: avatarData,
+        coverData: coverData);
     if (response.isLeft) return Left(response.left);
     return Right(response.right);
   }

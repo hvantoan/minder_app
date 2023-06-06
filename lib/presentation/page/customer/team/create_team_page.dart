@@ -1,25 +1,24 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minder/core/failures/team_failures.dart';
 import 'package:minder/generated/l10n.dart';
-import 'package:minder/presentation/bloc/file/controller/file_controller_cubit.dart';
 import 'package:minder/presentation/bloc/team/controller/team_controller_cubit.dart';
-import 'package:minder/presentation/bloc/team/data/team/team_cubit.dart';
 import 'package:minder/presentation/page/customer/team/select_stadium_type_page.dart';
 import 'package:minder/presentation/widget/button/button_widget.dart';
 import 'package:minder/presentation/widget/image_picker/image_picker_widget.dart';
 import 'package:minder/presentation/widget/sheet/sheet_widget.dart';
 import 'package:minder/presentation/widget/text/text_widget.dart';
 import 'package:minder/presentation/widget/textfield/textfield_widget.dart';
-import 'package:minder/util/constant/enum/image_enum.dart';
 import 'package:minder/util/constant/enum/stadium_type_enum.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
 import 'package:minder/util/controller/loading_cover_controller.dart';
 import 'package:minder/util/helper/stadium_type_helper.dart';
 import 'package:minder/util/style/base_color.dart';
 import 'package:minder/util/style/base_icon.dart';
+import 'package:minder/util/style/base_size.dart';
 import 'package:minder/util/style/base_text_style.dart';
 
 class CreateTeamPage extends StatefulWidget {
@@ -30,7 +29,7 @@ class CreateTeamPage extends StatefulWidget {
 }
 
 class _CreateTeamPageState extends State<CreateTeamPage> {
-  int currentRate = 0;
+  int currentRate = 3;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController codeController = TextEditingController();
@@ -45,79 +44,6 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
   List<StadiumType> stadiumTypes = List.empty(growable: true);
   File? avatar;
   File? cover;
-
-  @override
-  void initState() {
-    GetIt.instance.get<TeamControllerCubit>().stream.listen((event) async {
-      if (!mounted) return;
-      if (event is TeamControllerHaveTeamState) {
-        setState(() {
-          createTeamErrorText = S.current.txt_err_have_got_team;
-        });
-        return;
-      }
-      if (event is TeamControllerCodeEmptyState) {
-        setState(() {
-          codeErrorText = S.current.txt_err_empty_code;
-        });
-        return;
-      }
-      if (event is TeamControllerNameEmptyState) {
-        setState(() {
-          nameErrorText = S.current.txt_err_empty_name;
-        });
-        return;
-      }
-      if (event is TeamControllerCodeExistState) {
-        setState(() {
-          codeErrorText = S.current.txt_err_exist_code;
-        });
-        return;
-      }
-      if (event is TeamControllerStadiumTypeEmptyState) {
-        setState(() {
-          typeErrorText = S.current.txt_err_empty_stadium_type;
-        });
-        return;
-      }
-      if (event is TeamControllerErrorState) {
-        setState(() {
-          createTeamErrorText = event.message;
-        });
-        return;
-      }
-      if (event is TeamControllerSuccessState) {
-        await saveFile(teamId: event.id!);
-        GetIt.instance.get<TeamControllerCubit>().clear();
-        if (mounted) {
-          GetIt.instance.get<TeamCubit>().getTeamById(teamId: event.id!);
-        }
-      }
-    });
-
-    GetIt.instance.get<TeamCubit>().stream.listen((event) {
-      if (!mounted) return;
-      if (event is TeamSuccessState) {
-        final team = event.team;
-        team.isAutoLocation = true;
-        team.isAutoTime = true;
-        GetIt.instance.get<TeamControllerCubit>().updateGameTime(team);
-        GetIt.instance.get<TeamControllerCubit>().updateLocation(team);
-        if (mounted) {
-          GetIt.instance.get<LoadingCoverController>().off(context);
-          Navigator.pop(context);
-        }
-      }
-    });
-
-    GetIt.instance.get<FileControllerCubit>().stream.listen((event) {
-      if (!mounted) return;
-      if (event is FileControllerSuccess) {
-        GetIt.instance.get<FileControllerCubit>().clean();
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,58 +67,75 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
   }
 
   _buildCreateForm() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextWidget.title(title: S.current.lbl_avatar),
-          Center(
-              child: ImagePickerWidget.addCircle(
-                  onTap: () => pickImage(isCover: false), imagePath: avatar)),
-          TextWidget.title(title: S.current.lbl_cover),
-          Center(
-              child: ImagePickerWidget.addRectangle(
-            onTap: () => pickImage(isCover: true),
-            imagePath: cover,
-          )),
-          TextWidget.title(title: S.current.lbl_team_name),
-          TextFieldWidget.common(
-              onChanged: (text) {},
-              hintText: S.current.lbl_team_name,
-              textEditingController: nameController,
-              errorText: nameErrorText),
-          TextWidget.title(title: S.current.lbl_key),
-          TextFieldWidget.common(
-              onChanged: (text) {},
-              hintText: S.current.txt_hint_key,
-              textEditingController: codeController,
-              errorText: codeErrorText),
-          TextWidget.title(title: S.current.lbl_description),
-          TextFieldWidget.common(
-              onChanged: (text) {},
-              textEditingController: descriptionController,
-              hintText: S.current.lbl_description),
-          TextWidget.title(title: S.current.lbl_level),
-          _rateBar(),
-          TextWidget.title(title: S.current.lbl_stadium_type),
-          TextFieldWidget.dropdown(
-              onTap: () => selectStadiumType(),
-              context: context,
-              controller: stadiumTypeController,
-              hintText: S.current.lbl_stadium_type),
-          if (createTeamErrorText != null)
+    return BlocListener<TeamControllerCubit, TeamControllerState>(
+      listener: (context, state) {
+        // TODO: implement listener
+        if (state is TeamControllerErrorState) {
+          createTeamErrorText = state.message;
+        }
+        if (state is TeamControllerHaveTeamState) {}
+        if (state is TeamControllerCodeExistState) {
+          codeErrorText = S.current.txt_err_exist_code;
+        }
+
+        if (state is TeamControllerSuccessState) {
+          GetIt.instance.get<LoadingCoverController>().off(context);
+          Navigator.pop(context);
+        }
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: padding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextWidget.title(title: S.current.lbl_avatar),
+            Center(
+                child: ImagePickerWidget.addCircle(
+                    onTap: () => pickImage(isCover: false), imagePath: avatar)),
+            TextWidget.title(title: S.current.lbl_cover),
+            Center(
+                child: ImagePickerWidget.addRectangle(
+              onTap: () => pickImage(isCover: true),
+              imagePath: cover,
+            )),
+            TextWidget.title(title: S.current.lbl_team_name),
+            TextFieldWidget.common(
+                onChanged: (text) {},
+                hintText: S.current.lbl_team_name,
+                textEditingController: nameController,
+                errorText: nameErrorText),
+            TextWidget.title(title: S.current.lbl_key),
+            TextFieldWidget.common(
+                onChanged: (text) {},
+                hintText: S.current.txt_hint_key,
+                textEditingController: codeController,
+                errorText: codeErrorText),
+            TextWidget.title(title: S.current.lbl_description),
+            TextFieldWidget.common(
+                onChanged: (text) {},
+                textEditingController: descriptionController,
+                hintText: S.current.lbl_description),
+            TextWidget.title(title: S.current.lbl_level),
+            _rateBar(),
+            TextWidget.title(title: S.current.lbl_stadium_type),
+            TextFieldWidget.dropdown(
+                onTap: () => selectStadiumType(),
+                context: context,
+                controller: stadiumTypeController,
+                hintText: S.current.lbl_stadium_type),
+            if (createTeamErrorText != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(createTeamErrorText!,
+                    style: BaseTextStyle.body2(color: BaseColor.red500)),
+              ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(createTeamErrorText!,
-                  style: BaseTextStyle.body2(color: BaseColor.red500)),
-            ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: ButtonWidget.primary(
-                onTap: () => createTeam(), content: S.current.btn_done),
-          )
-        ],
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: ButtonWidget.primary(
+                  onTap: () => createTeam(), content: S.current.btn_done),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -203,16 +146,18 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
 
   _star({required int limit}) {
     return GestureDetector(
-        onTap: () {
-          setState(() {
-            currentRate = limit;
-          });
-        },
-        child: Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: currentRate >= limit
-                ? BaseIcon.base(IconPath.starFill, color: BaseColor.yellow500)
-                : BaseIcon.base(IconPath.starLine, color: BaseColor.grey300)));
+      onTap: () {
+        setState(() {
+          currentRate = limit;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: currentRate >= limit
+            ? BaseIcon.base(IconPath.starFill, color: BaseColor.yellow500)
+            : BaseIcon.base(IconPath.starLine, color: BaseColor.grey300),
+      ),
+    );
   }
 
   void pickImage({required bool isCover}) async {
@@ -233,27 +178,18 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     }
   }
 
-  Future<void> saveFile({required String teamId}) async {
-    if (avatar != null) {
-      await GetIt.instance
-          .get<FileControllerCubit>()
-          .create(id: teamId, file: avatar!, type: ImageEnum.ta);
-    }
-    if (cover != null) {
-      await GetIt.instance
-          .get<FileControllerCubit>()
-          .create(id: teamId, file: cover!, type: ImageEnum.tc);
-    }
-  }
-
   void createTeam() {
-    GetIt.instance.get<LoadingCoverController>().on(context);
+    clearError();
+    if (!_validate()) return;
     clearError();
     unFocus();
+    GetIt.instance.get<LoadingCoverController>().on(context);
     GetIt.instance.get<TeamControllerCubit>().createTeam(
           name: nameController.text,
           code: codeController.text,
           level: currentRate,
+          avatarData: avatar,
+          coverData: cover,
           description: descriptionController.text,
           stadiumType: stadiumTypes,
         );
@@ -289,5 +225,28 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
 
   void unFocus() {
     FocusScope.of(context).unfocus();
+  }
+
+  bool _validate() {
+    if (nameController.text.isEmpty) {
+      nameErrorText = S.current.txt_err_empty_name;
+    }
+
+    if (nameController.text.length < 8) {
+      nameErrorText = S.current.txt_err_name_less_8_character;
+    }
+    if (codeController.text.isEmpty) {
+      codeErrorText = S.current.txt_err_empty_code;
+    }
+
+    int codeLength = codeController.text.length;
+    if (2 > codeLength || codeLength > 4) {
+      codeErrorText = S.current.txt_err_code_lenght;
+    }
+
+    setState(() {});
+    return nameErrorText == null &&
+        codeErrorText == null &&
+        typeErrorText == null;
   }
 }

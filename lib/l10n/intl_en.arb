@@ -54,6 +54,7 @@
   "lbl_cover": "Cover",
   "lbl_avatar": "Avatar",
   "lbl_team_name": "Team name",
+  "txt_err_name_less_8_character": "Team name must be at least 8 characters",
   "lbl_key": "Key",
   "txt_hint_key": "abc123",
   "lbl_description": "Description",
@@ -63,6 +64,7 @@
   "btn_done": "Done",
   "txt_err_exist_code": "Code already exists",
   "txt_err_empty_code": "Enter team code",
+  "txt_err_code_lenght": "Key must have from 2 to 4 characters",
   "txt_err_empty_name": "Enter team name",
   "txt_err_have_got_team": "You have got your own team",
   "txt_err_empty_stadium_type": "Select stadium type",
@@ -225,5 +227,6 @@
   "lbl_chat": "Chat",
   "txt_no_message": "No message in Conversation.",
   "txt_no_match_type": "There is no match type",
-  "txt_no_playing_time": "There is no playing time"
+  "txt_no_playing_time": "There is no playing time",
+  "lbl_create_group": "Create group"
 }

@@ -68,14 +68,14 @@ class UserRepository extends UserRepositoryInterface {
   }
 
   @override
-  Future<Either<Failures, List<User>>> getUsers({List<String>? userIds}) async {
+  Future<List<User>> getUsers({List<String>? userIds}) async {
     try {
       final response = await UserAPI().getUsers(userIds: userIds);
       final List<User> users =
           response.map((userModel) => User.fromModel(userModel)).toList();
-      return Right(users);
+      return users;
     } catch (e) {
-      return Left(FailuresHelper.fromCommonException(e));
+      return List.empty();
     }
   }
 

@@ -55,12 +55,8 @@ class UserUseCase extends UserUseCaseInterface {
   }
 
   @override
-  Future<Either<Failures, List<User>>> getUsers({List<String>? userIds}) async {
-    final response = await UserRepository().getUsers(userIds: userIds);
-    if (response.isLeft) {
-      return Left(response.left);
-    }
-    return Right(response.right);
+  Future<List<User>> getUsers({List<String>? userIds}) async {
+    return await UserRepository().getUsers(userIds: userIds);
   }
 
   @override

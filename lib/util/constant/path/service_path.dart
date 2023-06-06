@@ -1,9 +1,9 @@
 class ServicePath {
-  // static const String serviceHost = "https://minder.toolseoviet.com/api";
-  // static const String hub = "https://minder.toolseoviet.com/hubs/chat";
+  static const String serviceHost = "https://minder.toolseoviet.com/api";
+  static const String hub = "https://minder.toolseoviet.com/hubs/chat";
 
-  static const String serviceHost = "https://localhost:8100/api";
-  static const String hub = "https://localhost:8100/hubs/chat";
+  // static const String serviceHost = "https://localhost:8100/api";
+  // static const String hub = "https://localhost:8100/hubs/chat";
   static const String appVersion = "$serviceHost/app-info/ver";
 
   //Register, Forgot

@@ -10,6 +10,8 @@ import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/presentation/widget/chat/chat_input.dart';
 import 'package:minder/presentation/widget/message/text_message.dart';
 import 'package:minder/presentation/widget/message/time_line_message.dart';
+import 'package:minder/util/constant/path/icon_path.dart';
+import 'package:minder/util/style/base_size.dart';
 import 'package:minder/util/style/base_style.dart';
 
 class ConversationPage extends StatefulWidget {
@@ -30,7 +32,7 @@ class _ConversationPageState extends State<ConversationPage> {
   List<Message> _messages = List.empty(growable: true);
   List<Message> loadingMessage = List.empty(growable: true);
   ListMessageRequest req =
-      ListMessageRequest(groupId: "", pageIndex: 0, pageSize: 20);
+      ListMessageRequest(groupId: "", pageIndex: 0, pageSize: 2000);
 
   @override
   void dispose() {
@@ -77,6 +79,12 @@ class _ConversationPageState extends State<ConversationPage> {
             Text(widget.group.title, style: BaseTextStyle.label()),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: BaseIcon.base(IconPath.settingsLine),
+          )
+        ],
       );
     }
     return null;
@@ -122,7 +130,7 @@ class _ConversationPageState extends State<ConversationPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: padding),
                   ...List.generate(
                     _messages.length,
                     (index) {
@@ -142,7 +150,7 @@ class _ConversationPageState extends State<ConversationPage> {
                   ),
                   ...List.generate(loadingMessage.length,
                       (index) => TextMessage(message: loadingMessage[index])),
-                  const SizedBox(height: 16)
+                  const SizedBox(height: padding)
                 ],
               ),
             ),

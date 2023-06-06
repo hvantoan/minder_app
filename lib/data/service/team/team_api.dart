@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:minder/core/exception/common_exception.dart';
 import 'package:minder/core/exception/team_exception.dart';
 import 'package:minder/core/service/base_api_service.dart';
@@ -47,12 +49,15 @@ class TeamAPI {
     }
   }
 
-  Future<String> createTeam(
-      {required String name,
-      required String code,
-      required int level,
-      required List<int> stadiumType,
-      String? description}) async {
+  Future<String> createTeam({
+    required String name,
+    required String code,
+    required int level,
+    required List<int> stadiumType,
+    String? description,
+    File? avatarData,
+    File? coverData,
+  }) async {
     try {
       final BaseResponse response = await BaseAPIService.post(
           uri: ServicePath.saveTeam,
@@ -63,7 +68,10 @@ class TeamAPI {
             "gameSetting": GameSettingModel(
                     gameTypes: stadiumType.cast<num>(), rank: level)
                 .toJson(),
-            "description": description
+            "description": description,
+            "avatarData":
+                avatarData != null ? avatarData.readAsBytesSync() : [],
+            "coverData": coverData != null ? coverData.readAsBytesSync() : []
           });
       if (response.statusCode == 31) {
         throw TeamCodeExistException();

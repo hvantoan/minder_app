@@ -13,8 +13,7 @@ class DebugData {
           (DebugConfig.fakeLoading && DebugConfig.mode == Mode.debug) ? 5 : 0);
 
   /// Test Account
-  static LoginModel debugAccount =
-      LoginModel("it.vantoan@gmail.com", "12345678");
+  static LoginModel debugAccount = LoginModel("test@gmail.com", "12345678");
 
   /// Test register Account
   static RegisterModel debugRegisterAccount = RegisterModel(

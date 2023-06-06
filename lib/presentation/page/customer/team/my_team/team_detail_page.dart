@@ -137,8 +137,13 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                         imagePath: team.avatar,
                         size: smallAvatarSize),
                   ),
-                  Text("${team.name} ", style: BaseTextStyle.label()),
-                  Text(" (${team.code})", style: BaseTextStyle.body1()),
+                  Expanded(
+                    child: Text(
+                      "${team.name}(${team.code})",
+                      style: BaseTextStyle.label(),
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
                 ],
               )
             : null,

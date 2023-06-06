@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 // ignore: implementation_imports
 import 'package:either_dart/src/either.dart';
@@ -17,7 +19,7 @@ class TeamRepository extends TeamRepositoryInterface {
   Future<Either<Failures, List<Team>>> getTeams({bool isMyTeam = true}) async {
     try {
       final response = await TeamAPI().getTeams(isMyTeam: isMyTeam);
-      final List<Team> teams =  response.map((e) => Team.fromModel(e)).toList();
+      final List<Team> teams = response.map((e) => Team.fromModel(e)).toList();
       return Right(teams);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));
@@ -30,19 +32,18 @@ class TeamRepository extends TeamRepositoryInterface {
       required String code,
       required int level,
       required List<int> stadiumType,
+      File? avatarData,
+      File? coverData,
       String? description}) async {
-    if (name.isEmpty) {
-      return Left(EmptyTeamNameFailures());
-    }
-    if (code.isEmpty) {
-      return Left(EmptyTeamCodeFailures());
-    }
-    if (stadiumType.isEmpty) {
-      return Left(EmptyTeamTypeFailures());
-    }
     try {
       final response = await TeamAPI().createTeam(
-          name: name, code: code, level: level, stadiumType: stadiumType);
+        name: name,
+        code: code,
+        level: level,
+        stadiumType: stadiumType,
+        avatarData: avatarData,
+        coverData: coverData,
+      );
       return Right(response);
     } catch (e) {
       if (e is TeamCodeExistException) {

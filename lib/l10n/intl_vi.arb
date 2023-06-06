@@ -71,7 +71,9 @@
   "btn_done": "Xong",
   "txt_err_exist_code": "Tên viết tắt đã tồn tại",
   "txt_err_empty_code": "Nhập tên viết tắt cho đội",
+  "txt_err_code_lenght": "Tên viết tắt phải có từ 2 đến 4 ký tự",
   "txt_err_empty_name": "Nhập tên đội",
+  "txt_err_name_less_8_character": "Tên đội phải có ít nhất 8 ký tự",
   "txt_err_have_got_team": "Bạn đã có đội của riêng bạn",
   "txt_err_empty_stadium_type": "Chọn loại sân đấu",
   "lbl_stadium": "Sân",
@@ -225,5 +227,6 @@
   "lbl_chat": "Đoạn chat",
   "txt_no_message": "Chưa có tin nhắn nào.",
   "txt_no_match_type": "Không có loại trận đấu nào",
-  "txt_no_playing_time": "Không có thời gian thi đấu"
+  "txt_no_playing_time": "Không có thời gian thi đấu",
+  "lbl_create_group": "Tạo nhóm"
 }
