@@ -12,10 +12,8 @@ import 'package:minder/util/style/base_text_style.dart';
 
 class InvitePage extends StatefulWidget {
   final List<Invite> invites;
-  final String myTeamId;
 
-  const InvitePage({Key? key, required this.invites, required this.myTeamId})
-      : super(key: key);
+  const InvitePage({Key? key, required this.invites}) : super(key: key);
 
   @override
   State<InvitePage> createState() => _InvitePageState();
@@ -33,7 +31,7 @@ class _InvitePageState extends State<InvitePage> {
       if (!mounted) return;
       if (event is TeamControllerSuccessState) {
         GetIt.instance.get<TeamsCubit>().getTeams();
-        GetIt.instance.get<FindTeamCubit>().getTeams(teamId: widget.myTeamId);
+        GetIt.instance.get<FindTeamCubit>().find();
         GetIt.instance.get<TeamControllerCubit>().clear();
       }
     });

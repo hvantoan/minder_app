@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:minder/presentation/bloc/group/group_cubit.dart';
 import 'package:minder/presentation/bloc/message/message_cubit.dart';
 import 'package:minder/util/constant/path/service_path.dart';
 import 'package:minder/util/helper/token_helper.dart';
@@ -31,6 +32,12 @@ class NotificationLayerCubit extends Cubit<NotificationLayerState> {
       "RecieveMessage",
       (arguments) {
         GetIt.instance.get<MessageCubit>().emitState();
+      },
+    );
+    hub.on(
+      "ReloadGroup",
+      (arguments) {
+        GetIt.instance.get<GroupCubit>().load(pageIndex: 0, pageSize: 100);
       },
     );
     await hub.start();

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:minder/data/repository/implement/group_repository_impl.dart';
+import 'package:minder/data/repository/implement/user_repository_impl.dart';
 import 'package:minder/domain/entity/user/user.dart';
 import 'package:minder/generated/l10n.dart';
+import 'package:minder/presentation/bloc/group/group_cubit.dart';
 import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/presentation/widget/textfield/textfield_widget.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
+import 'package:minder/util/controller/loading_cover_controller.dart';
 import 'package:minder/util/style/base_size.dart';
 import 'package:minder/util/style/base_style.dart';
 
 class AddGroupPage extends StatefulWidget {
-  const AddGroupPage({super.key, required this.users});
-  final List<User> users;
+  const AddGroupPage({super.key});
   @override
   State<AddGroupPage> createState() => _AddGroupPageState();
 }
@@ -17,67 +21,128 @@ class AddGroupPage extends StatefulWidget {
 class _AddGroupPageState extends State<AddGroupPage> {
   List<String> selectedUserIds = List.empty(growable: true);
   TextEditingController searchText = TextEditingController();
+  List<User> users = List.empty(growable: true);
+  List<User> display = List.empty(growable: true);
+
+  Future<List<User>> _fetchData() async {
+    if (users.isNotEmpty) return users;
+    return UserRepository().getUsers();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: BaseColor.grey200, width: 1))),
-            child: Stack(
+    return FutureBuilder<List<User>>(
+      future: _fetchData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          users = snapshot.data ?? [];
+          if (searchText.text.isNotEmpty) {
+            display = users
+                .where((element) => element.name!
+                    .toLowerCase()
+                    .contains(searchText.text.toLowerCase()))
+                .toList();
+          } else {
+            display = users;
+          }
+        }
+        return Scaffold(
+          appBar: _buildAppBar(context),
+          body: Container(
+            color: Colors.white,
+            child: Column(
               children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width - 32,
-                  child: Text(S.current.lbl_create_group,
-                      style: BaseTextStyle.label(color: BaseColor.grey900)),
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  width: MediaQuery.of(context).size.width,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: padding, right: padding, left: padding),
+                  child: TextFieldWidget.base(
+                    hintText: S.current.txt_search,
+                    onChanged: (name) {
+                      searchText.text = name;
+                      setState(() {});
                     },
-                    child: Text(S.current.btn_done,
-                        style: BaseTextStyle.label(color: BaseColor.green500)),
+                    suffixIconPath: IconPath.searchLine,
                   ),
                 ),
+                const SizedBox(height: 16),
+                _buildListUser(snapshot.connectionState),
+                const SizedBox(height: 16),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: padding, right: padding, left: padding),
-            child: TextFieldWidget.base(
-              hintText: S.current.txt_search,
-              onChanged: (name) {},
-              suffixIconPath: IconPath.searchLine,
+        );
+      },
+    );
+  }
+
+  Expanded _buildListUser(ConnectionState state) {
+    if (state == ConnectionState.waiting && users.isEmpty) {
+      return const Expanded(child: Center(child: CircularProgressIndicator()));
+    }
+    return Expanded(
+      child: ListView.builder(
+        itemCount: display.length,
+        itemBuilder: (context, index) => _buildUserItem(
+          user: display[index],
+          selectedUserIds: selectedUserIds,
+          onClick: (id) {
+            var findId = selectedUserIds.where((element) => element == id);
+            if (findId.isNotEmpty) {
+              selectedUserIds.remove(findId.first);
+            } else {
+              selectedUserIds.add(id);
+            }
+            setState(() {});
+          },
+        ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 56,
+      title: Text(S.current.lbl_create_group, style: BaseTextStyle.label()),
+      centerTitle: true,
+      shadowColor: Colors.black.withOpacity(0.25),
+      actions: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () {
+                if (selectedUserIds.isNotEmpty) {
+                  GetIt.instance.get<LoadingCoverController>().on(context);
+                  GroupRepository()
+                      .create(userIds: selectedUserIds)
+                      .then((value) {
+                    GetIt.instance
+                        .get<GroupCubit>()
+                        .load(pageIndex: 0, pageSize: 100);
+                    GetIt.instance.get<LoadingCoverController>().off(context);
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text(S.current.txt_done,
+                  style: BaseTextStyle.body1(color: BaseColor.green500)),
             ),
           ),
-          Expanded(
-              child: ListView.builder(
-            itemCount: widget.users.length,
-            itemBuilder: (context, index) => _buildUserItem(
-              user: widget.users[index],
-              selectedUserIds: selectedUserIds,
-              onClick: (id) {
-                var findId = selectedUserIds.where((element) => element == id);
-                if (findId.isNotEmpty) {
-                  selectedUserIds.remove(findId.first);
-                } else {
-                  selectedUserIds.add(id);
-                }
-                setState(() {});
-              },
-            ),
-          ))
-        ],
+        ),
+      ],
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: Center(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(S.current.txt_cancel,
+                style: BaseTextStyle.body1(color: BaseColor.grey900)),
+          ),
+        ),
       ),
+      backgroundColor: Colors.white,
     );
   }
 

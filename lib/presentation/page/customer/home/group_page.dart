@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minder/domain/entity/group/group.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/group/group_cubit.dart';
+import 'package:minder/presentation/page/customer/home/add_group_page.dart';
 import 'package:minder/presentation/page/customer/home/conversation_page.dart';
 import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
@@ -38,7 +39,10 @@ class _GroupPageState extends State<GroupPage> {
               backgroundColor: Colors.white,
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const AddGroupPage()));
+                  },
                   icon: BaseIcon.base(IconPath.pencilLine,
                       size: const Size(24, 24)),
                 )
@@ -63,6 +67,7 @@ class _GroupPageState extends State<GroupPage> {
                 group: group,
               ))),
       child: Container(
+        width: double.infinity,
         margin:
             const EdgeInsets.only(top: padding, left: padding, right: padding),
         padding: const EdgeInsets.all(padding),
@@ -76,19 +81,24 @@ class _GroupPageState extends State<GroupPage> {
             AvatarWidget.base(
                 size: 48, imagePath: group.avatar, name: group.title),
             const SizedBox(width: padding),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  group.title,
-                  style: BaseTextStyle.label(),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  group.lastMessage,
-                  style: BaseTextStyle.caption(),
-                )
-              ],
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 8 * padding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    group.title,
+                    style: BaseTextStyle.label(),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    group.lastMessage,
+                    style: BaseTextStyle.caption(),
+                    overflow: TextOverflow.clip,
+                  )
+                ],
+              ),
             )
           ],
         ),

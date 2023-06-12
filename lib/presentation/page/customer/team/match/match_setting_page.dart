@@ -339,7 +339,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
                                                 AvatarWidget.base(
                                                     name: host.stadium!.name!,
                                                     imagePath: opposite
-                                                        .stadium!.avatar,
+                                                        .stadium?.avatar,
                                                     size: mediumAvatarSize),
                                                 Expanded(
                                                   child: Padding(

@@ -13,4 +13,5 @@ class GroupUsecase extends GroupUsecaseInterface {
     if (response.isLeft) return Left(response.left);
     return Right(response.right);
   }
+
 }

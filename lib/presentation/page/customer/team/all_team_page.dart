@@ -179,12 +179,8 @@ class _AllTeamPageState extends State<AllTeamPage> {
                 prefixIconPath: IconPath.addLine),
           ),
         ButtonWidget.primary(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FindTeamPage(
-                          myTeamId: myTeamId,
-                        ))),
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const FindTeamPage())),
             content: S.current.btn_find_team,
             prefixIconPath: IconPath.searchLine),
       ],

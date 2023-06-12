@@ -167,4 +167,32 @@ class TeamUseCase extends TeamUseCaseInterface {
     }
     return Right(response.right);
   }
+
+  @override
+  Future<Either<Failures, List<Team>>> find({
+    int pageIndex = 0,
+    int pageSize = 10,
+    int? member,
+    int? rank,
+    int? age,
+    int? position,
+    int? gameType,
+    int? day,
+    int? time,
+  }) async {
+    final response = await TeamRepository().find(
+      pageIndex: pageIndex,
+      pageSize: pageIndex,
+      member: member,
+      rank: rank,
+      position: position,
+      gameType: gameType,
+      day: day,
+      time: time,
+    );
+    if (response.isLeft) {
+      return Left(response.left);
+    }
+    return Right(response.right);
+  }
 }

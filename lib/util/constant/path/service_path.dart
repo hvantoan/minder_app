@@ -27,7 +27,8 @@ class ServicePath {
   static const String create = "create";
   static const String autoCal = "$serviceHost/teams/auto-cal";
   static const String suggestUser = "$serviceHost/teams/suggest-user";
-  static const String suggestTeam = "$serviceHost/teams/suggess";
+  static const String suggestTeam = "$serviceHost/teams/suggest";
+  static const String findTeam = "$serviceHost/teams/find";
 
   ///User
   static const String user = "$serviceHost/users";
@@ -37,6 +38,7 @@ class ServicePath {
   static const String sendMessage = "$serviceHost/messages/send-message";
   static const String saveUser = "$serviceHost/users/save";
   static const String listGroup = "$serviceHost/groups";
+  static const String createGroup = "$serviceHost/groups/create";
 
   ///File
   static const String file = "$serviceHost/file/create";

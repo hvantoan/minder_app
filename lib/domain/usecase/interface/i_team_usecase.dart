@@ -50,4 +50,15 @@ abstract class TeamUseCaseInterface {
       required bool hasInvite});
 
   Future<Either<Failures, List<Team>>> getSuggestTeam({required String teamId});
+  Future<Either<Failures, List<Team>>> find({
+    int pageIndex = 0,
+    int pageSize = 10,
+    int? member,
+    int? rank,
+    int? age,
+    int? position,
+    int? gameType,
+    int? day,
+    int? time,
+  });
 }

@@ -17,4 +17,9 @@ class GroupRepository extends GroupRepositoryInterface {
       return Left(FailuresHelper.fromCommonException(e));
     }
   }
+
+  @override
+  Future<void> create({required List<String> userIds}) async {
+    await GroupAPI().create(userIds: userIds);
+  }
 }

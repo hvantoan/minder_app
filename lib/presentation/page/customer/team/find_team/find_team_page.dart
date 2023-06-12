@@ -26,9 +26,7 @@ import 'package:tiengviet/tiengviet.dart';
 const int _shimmerAmount = 5;
 
 class FindTeamPage extends StatefulWidget {
-  final String myTeamId;
-
-  const FindTeamPage({Key? key, required this.myTeamId}) : super(key: key);
+  const FindTeamPage({Key? key}) : super(key: key);
 
   @override
   State<FindTeamPage> createState() => _FindTeamPageState();
@@ -106,7 +104,10 @@ class _FindTeamPageState extends State<FindTeamPage> {
           const EdgeInsets.symmetric(horizontal: mediumPadding + smallPadding),
       child: BlocBuilder<FindTeamCubit, FindTeamState>(
           bloc: GetIt.instance.get<FindTeamCubit>()
-            ..getTeams(teamId: widget.myTeamId),
+            ..find(
+              pageIndex: 0,
+              pageSize: 100,
+            ),
           builder: (context, state) {
             if (state is FindTeamSuccess) {
               return Column(
@@ -134,14 +135,10 @@ class _FindTeamPageState extends State<FindTeamPage> {
                           invites.remove(invite);
                           invites.insert(0, invite);
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => InvitePage(
-                                invites: invites,
-                                myTeamId: widget.myTeamId,
-                              ),
-                            ),
-                          );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      InvitePage(invites: invites)));
                         },
                       );
                     }),
@@ -175,9 +172,7 @@ class _FindTeamPageState extends State<FindTeamPage> {
                 subContent: state.message,
                 imagePath: ImagePath.dataParsingFailed,
                 buttonContent: S.current.btn_try_again,
-                onButtonTap: () => GetIt.instance
-                    .get<FindTeamCubit>()
-                    .getTeams(teamId: widget.myTeamId),
+                onButtonTap: () => GetIt.instance.get<FindTeamCubit>().find(),
               );
             }
             return _shimmer();

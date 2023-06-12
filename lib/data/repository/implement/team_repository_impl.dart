@@ -261,4 +261,34 @@ class TeamRepository extends TeamRepositoryInterface {
       return Left(FailuresHelper.fromCommonException(e));
     }
   }
+
+  @override
+  Future<Either<Failures, List<Team>>> find({
+    int pageIndex = 0,
+    int pageSize = 10,
+    int? member,
+    int? rank,
+    int? age,
+    int? position,
+    int? gameType,
+    int? day,
+    int? time,
+  }) async {
+    try {
+      final response = await TeamAPI().find(
+        pageIndex: pageIndex,
+        pageSize: pageIndex,
+        member: member,
+        rank: rank,
+        position: position,
+        gameType: gameType,
+        day: day,
+        time: time,
+      );
+      final List<Team> teams = response.map((e) => Team.fromModel(e)).toList();
+      return Right(teams);
+    } catch (e) {
+      return Left(FailuresHelper.fromCommonException(e));
+    }
+  }
 }

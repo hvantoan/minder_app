@@ -76,7 +76,14 @@ class _ConversationPageState extends State<ConversationPage> {
           children: [
             AvatarWidget.base(size: 32, imagePath: widget.group.avatar),
             const SizedBox(width: 16),
-            Text(widget.group.title, style: BaseTextStyle.label()),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 184,
+              child: Text(
+                widget.group.title,
+                style: BaseTextStyle.label(),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
         actions: [

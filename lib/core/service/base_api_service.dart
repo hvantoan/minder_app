@@ -30,6 +30,7 @@ class BaseAPIService {
       bool withToken = true}) async {
     try {
       print("\nEnpoint:$uri");
+      print("\nParams $params");
       final client = http.Client();
       Future.delayed(ServiceConstant.apiWaitingDuration)
           .whenComplete(() => client.close());

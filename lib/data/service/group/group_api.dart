@@ -30,4 +30,24 @@ class GroupAPI {
       throw DataParsingException();
     }
   }
+
+  Future<void> create({required List<String> userIds}) async {
+    try {
+      Map<String, dynamic> params = {
+        "userIds": userIds,
+      };
+      final BaseResponse response = await BaseAPIService.post(
+          uri: ServicePath.createGroup, withToken: true, params: params);
+      if (response.isSuccess) {
+        return;
+      }
+      switch (response.statusCode) {
+        default:
+          throw DataParsingException();
+      }
+    } catch (e) {
+      if (e is ResponseException || e is AuthenticationException) rethrow;
+      throw DataParsingException();
+    }
+  }
 }

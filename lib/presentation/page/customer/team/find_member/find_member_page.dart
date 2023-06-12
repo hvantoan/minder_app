@@ -96,11 +96,13 @@ class _FindMemberPageState extends State<FindMemberPage> {
                         invites.remove(invite);
                         invites.insert(0, invite);
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RequestJoinPage(
-                                      invites: invites,
-                                    )));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RequestJoinPage(
+                              invites: invites,
+                            ),
+                          ),
+                        );
                       },
                     );
                   }),

@@ -318,4 +318,45 @@ class TeamAPI {
       rethrow;
     }
   }
+
+  Future<List<TeamModel>> find({
+    int pageIndex = 0,
+    int pageSize = 10,
+    int? member,
+    int? rank,
+    int? age,
+    int? position,
+    int? gameType,
+    int? day,
+    int? time,
+  }) async {
+    try {
+      final BaseResponse response = await BaseAPIService.post(
+          uri: ServicePath.findTeam,
+          withToken: true,
+          params: {
+            "pageIndex": pageIndex,
+            "pageSize": pageSize,
+            "member": member,
+            "rank": rank,
+            "age": age,
+            "position": position,
+            "gameType": gameType,
+            "day": day,
+            "time": time
+          });
+      if (response.isSuccess) {
+        final List<TeamModel> teamModels = List.empty(growable: true);
+        final data = response.data!["items"];
+        for (var element in (data as List)) {
+          final TeamModel teamModel = TeamModel.fromJson(element);
+          teamModels.add(teamModel);
+        }
+        return teamModels;
+      }
+      throw DataParsingException();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
