@@ -8,10 +8,10 @@ import 'package:minder/util/constant/path/service_path.dart';
 class RefreshTokenAPI {
   Future<TokenModel> refreshToken(String refreshToken) async {
     try {
-      final BaseResponse response = await BaseAPIService.post(
+      final BaseResponse response = await BaseAPIService.get(
           uri: ServicePath.refreshToken,
-          params: {"refreshToken": refreshToken},
-          withToken: false);
+          withToken: false,
+          refreshToken: refreshToken);
       if (response.isSuccess) {
         TokenModel tokenModel =
             TokenModel.fromJson(response.data, refreshToken);

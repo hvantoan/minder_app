@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:minder/domain/entity/group/group.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/group/group_cubit.dart';
@@ -19,6 +20,12 @@ class GroupPage extends StatefulWidget {
 
 class _GroupPageState extends State<GroupPage> {
   List<Group> groups = List.empty(growable: true);
+
+  @override
+  void initState() {
+    GetIt.instance.get<GroupCubit>().load(pageIndex: 0, pageSize: 20);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +56,18 @@ class _GroupPageState extends State<GroupPage> {
               ],
               shadowColor: BaseColor.grey500.withOpacity(0.08),
             ),
-            body: ListView.builder(
-              shrinkWrap: true,
-              itemCount: groups.length,
-              itemBuilder: (context, index) => _group(groups[index]),
+            body: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: groups.length,
+                    itemBuilder: (context, index) => _group(groups[index]),
+                  ),
+                ),
+                const SizedBox(height: bottomNavigation + 8)
+              ],
             ),
           ),
         );

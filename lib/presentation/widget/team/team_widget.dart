@@ -35,33 +35,26 @@ class TeamWidget {
           ),
           Expanded(
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                team.name,
-                style: BaseTextStyle.label(color: BaseColor.green600),
-              ),
-              const SizedBox(
-                height: 2.0,
-              ),
-              Row(
-                children: [
-                  Text(
-                    S.current.txt_owner,
-                    style: BaseTextStyle.caption(color: BaseColor.grey500),
-                  ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                Text(
+                  team.name,
+                  style: BaseTextStyle.label(color: BaseColor.green600),
+                ),
+                const SizedBox(
+                  height: 2.0,
+                ),
+                Row(children: [
+                  Text(S.current.txt_owner,
+                      style: BaseTextStyle.caption(color: BaseColor.grey500)),
                   const SizedBox(
                     width: 4.0,
                   ),
-                  Text(
-                    team.owner ?? "",
-                    style: BaseTextStyle.caption(color: BaseColor.grey900),
-                  ),
-                ],
-              ),
-            ],
-          )),
+                  Text(team.owner ?? "",
+                      style: BaseTextStyle.caption(color: BaseColor.grey900)),
+                ]),
+              ])),
           if (team.regency == 2)
             BaseIcon.base(IconPath.keyLine,
                 color: BaseColor.yellow500, size: const Size(16.0, 16.0)),
@@ -129,7 +122,7 @@ class TeamWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _label(S.current.lbl_invitation_position),
-                      (team.gameSetting!.positions != null &&
+                      (team.gameSetting?.positions != null &&
                               team.gameSetting!.positions!.isNotEmpty)
                           ? Row(
                               children: team.gameSetting!.positions!

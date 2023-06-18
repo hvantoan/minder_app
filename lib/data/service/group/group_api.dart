@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:minder/core/exception/authentication_exception.dart';
 import 'package:minder/core/exception/common_exception.dart';
 import 'package:minder/core/service/base_api_service.dart';
@@ -20,6 +22,32 @@ class GroupAPI {
             .map((o) => GroupModel.fromMap(o))
             .toList();
         return groups;
+      }
+      switch (response.statusCode) {
+        default:
+          throw DataParsingException();
+      }
+    } catch (e) {
+      if (e is ResponseException || e is AuthenticationException) rethrow;
+      throw DataParsingException();
+    }
+  }
+
+  Future<bool> update({
+    required String groupId,
+    required String groupName,
+    File? avatar,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        "groupId": groupId,
+        "groupName": groupName,
+        "avatar": avatar != null ? avatar.readAsBytesSync() : []
+      };
+      final BaseResponse response = await BaseAPIService.post(
+          uri: ServicePath.updateGroup, withToken: true, params: params);
+      if (response.isSuccess) {
+        return true;
       }
       switch (response.statusCode) {
         default:

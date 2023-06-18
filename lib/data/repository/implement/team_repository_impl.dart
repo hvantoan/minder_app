@@ -277,7 +277,7 @@ class TeamRepository extends TeamRepositoryInterface {
     try {
       final response = await TeamAPI().find(
         pageIndex: pageIndex,
-        pageSize: pageIndex,
+        pageSize: pageSize,
         member: member,
         rank: rank,
         position: position,

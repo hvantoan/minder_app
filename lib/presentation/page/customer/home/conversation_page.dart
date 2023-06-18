@@ -6,6 +6,7 @@ import 'package:minder/domain/entity/chat/message.dart';
 import 'package:minder/domain/entity/group/group.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/message/message_cubit.dart';
+import 'package:minder/presentation/page/customer/home/group_setting_page.dart';
 import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/presentation/widget/chat/chat_input.dart';
 import 'package:minder/presentation/widget/message/text_message.dart';
@@ -88,7 +89,10 @@ class _ConversationPageState extends State<ConversationPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => GroupSettingPage(group: widget.group)));
+            },
             icon: BaseIcon.base(IconPath.settingsLine),
           )
         ],

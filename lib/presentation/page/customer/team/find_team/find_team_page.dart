@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:minder/domain/entity/team/team.dart';
-import 'package:minder/domain/entity/user/user.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/team/data/find_team/find_team_cubit.dart';
 import 'package:minder/presentation/page/customer/team/all_team_page.dart';
@@ -116,18 +115,10 @@ class _FindTeamPageState extends State<FindTeamPage> {
                   ListTileWidget.base(
                     title: S.current.lbl_invitation,
                     textEmpty: S.current.txt_no_team,
-                    children: List.generate(
-                        filterTeam(
-                                teams: state.inviteTeams
-                                    .map((e) => e.team!)
-                                    .toList())
-                            .length, (index) {
-                      final team = filterTeam(
-                          teams: state.inviteTeams
-                              .map((e) => e.team!)
-                              .toList())[index];
+                    children: List.generate(state.inviteTeams.length, (index) {
+                      var team = state.inviteTeams[index].team;
                       return TeamTileWidget.base(
-                        team: team,
+                        team: team!,
                         onTap: () {
                           final invites = state.inviteTeams;
                           final invite = invites.firstWhere(
@@ -146,13 +137,12 @@ class _FindTeamPageState extends State<FindTeamPage> {
                   ListTileWidget.base(
                     title: S.current.lbl_maybe_come_in,
                     textEmpty: S.current.txt_no_team,
-                    children: List.generate(
-                        filterTeam(teams: state.suggest).length, (index) {
-                      final team = filterTeam(teams: state.suggest)[index];
+                    children: List.generate(state.suggest.length, (index) {
+                      final team = state.suggest[index];
                       return TeamTileWidget.base(
                         team: team,
                         onTap: () {
-                          final teams = filterTeam(teams: state.suggest);
+                          final teams = state.suggest;
                           teams.remove(team);
                           teams.insert(0, team);
                           Navigator.push(
@@ -178,52 +168,6 @@ class _FindTeamPageState extends State<FindTeamPage> {
             return _shimmer();
           }),
     );
-  }
-
-  List<Team> filterTeam({required List<Team> teams}) {
-    return teams
-        .where((element) =>
-            TiengViet.parse(element.name)
-                .toLowerCase()
-                .contains(TiengViet.parse(currentSearchString).toLowerCase()) &&
-            (currentRate != null
-                ? element.gameSetting!.rank == currentRate
-                : true) &&
-            (selectedNumberOfMembers != null
-                ? selectedNumberOfMembers == element.members!.length
-                : true) &&
-            (selectedAverageAge.isNotEmpty
-                ? selectedAverageAge
-                    .where((age) =>
-                        _ageFilter(age, _ageCalculate(element.members!)))
-                    .isNotEmpty
-                : true) &&
-            (selectedPosition.isNotEmpty
-                ? selectedPosition
-                    .where((position) =>
-                        element.gameSetting!.positions!.contains(position))
-                    .isNotEmpty
-                : true) &&
-            true &&
-            (selectedMatchType.isNotEmpty
-                ? selectedMatchType
-                    .where((matchType) =>
-                        element.gameSetting!.gameTypes!.contains(matchType))
-                    .isNotEmpty
-                : true) &&
-            (selectedWeekday.isNotEmpty
-                ? selectedWeekday
-                    .where((weekday) =>
-                        _weekdayFilter(weekday, element.gameSetting!))
-                    .isNotEmpty
-                : true) &&
-            (selectedTime.isNotEmpty
-                ? selectedTime
-                    .where((time) =>
-                        _timeFilter(time, element.gameSetting!).isNotEmpty)
-                    .isNotEmpty
-                : true))
-        .toList();
   }
 
   Widget _shimmer() {
@@ -288,128 +232,6 @@ class _FindTeamPageState extends State<FindTeamPage> {
       selectedWeekday.addAll(result[6]);
       selectedTime.addAll(result[7]);
     }
-  }
-
-  int _ageCalculate(List<Member> members) {
-    int sum = 0;
-    for (var member in members) {
-      sum += member.user!.age?.toInt() ?? 0;
-    }
-    return sum ~/ members.length;
-  }
-
-  bool _ageFilter(int age, int averageAge) {
-    if (age == 0) {
-      return averageAge < 16;
-    }
-    if (age == 16) {
-      return averageAge >= 16 && averageAge <= 25;
-    }
-    if (age == 25) {
-      return averageAge > 25 && averageAge <= 35;
-    }
-    if (age == 35) {
-      return averageAge > 35;
-    }
-    return true;
-  }
-
-  bool _weekdayFilter(Weekday weekday, GameSetting gameSetting) {
-    if (weekday == Weekday.monday) {
-      return gameSetting.gameTime!.monday!.isNotEmpty;
-    }
-    if (weekday == Weekday.tuesday) {
-      return gameSetting.gameTime!.tuesday!.isNotEmpty;
-    }
-    if (weekday == Weekday.wednesday) {
-      return gameSetting.gameTime!.wednesday!.isNotEmpty;
-    }
-    if (weekday == Weekday.thursday) {
-      return gameSetting.gameTime!.thursday!.isNotEmpty;
-    }
-    if (weekday == Weekday.friday) {
-      return gameSetting.gameTime!.friday!.isNotEmpty;
-    }
-    if (weekday == Weekday.saturday) {
-      return gameSetting.gameTime!.saturday!.isNotEmpty;
-    }
-    if (weekday == Weekday.sunday) {
-      return gameSetting.gameTime!.sunday!.isNotEmpty;
-    }
-    return true;
-  }
-
-  List<num> _timeFilter(int time, GameSetting gameSetting) {
-    final List<num> times = List.empty(growable: true);
-    if (time == 0) {
-      times.addAll(
-          gameSetting.gameTime!.monday!.where((element) => element <= 6));
-      times.addAll(
-          gameSetting.gameTime!.tuesday!.where((element) => element <= 6));
-      times.addAll(
-          gameSetting.gameTime!.wednesday!.where((element) => element <= 6));
-      times.addAll(
-          gameSetting.gameTime!.thursday!.where((element) => element <= 6));
-      times.addAll(
-          gameSetting.gameTime!.friday!.where((element) => element <= 6));
-      times.addAll(
-          gameSetting.gameTime!.saturday!.where((element) => element <= 6));
-      times.addAll(
-          gameSetting.gameTime!.sunday!.where((element) => element <= 6));
-    }
-
-    if (time == 6) {
-      times.addAll(gameSetting.gameTime!.monday!
-          .where((element) => element > 6 && element <= 12));
-      times.addAll(gameSetting.gameTime!.tuesday!
-          .where((element) => element > 6 && element <= 12));
-      times.addAll(gameSetting.gameTime!.wednesday!
-          .where((element) => element > 6 && element <= 12));
-      times.addAll(gameSetting.gameTime!.thursday!
-          .where((element) => element > 6 && element <= 12));
-      times.addAll(gameSetting.gameTime!.friday!
-          .where((element) => element > 6 && element <= 12));
-      times.addAll(gameSetting.gameTime!.saturday!
-          .where((element) => element > 6 && element <= 12));
-      times.addAll(gameSetting.gameTime!.sunday!
-          .where((element) => element > 6 && element <= 12));
-    }
-
-    if (time == 12) {
-      times.addAll(gameSetting.gameTime!.monday!
-          .where((element) => element > 12 && element <= 18));
-      times.addAll(gameSetting.gameTime!.tuesday!
-          .where((element) => element > 12 && element <= 18));
-      times.addAll(gameSetting.gameTime!.wednesday!
-          .where((element) => element > 12 && element <= 18));
-      times.addAll(gameSetting.gameTime!.thursday!
-          .where((element) => element > 12 && element <= 18));
-      times.addAll(gameSetting.gameTime!.friday!
-          .where((element) => element > 12 && element <= 18));
-      times.addAll(gameSetting.gameTime!.saturday!
-          .where((element) => element > 12 && element <= 18));
-      times.addAll(gameSetting.gameTime!.sunday!
-          .where((element) => element > 12 && element <= 18));
-    }
-
-    if (time == 18) {
-      times.addAll(gameSetting.gameTime!.monday!
-          .where((element) => element > 18 && element <= 24));
-      times.addAll(gameSetting.gameTime!.tuesday!
-          .where((element) => element > 18 && element <= 24));
-      times.addAll(gameSetting.gameTime!.wednesday!
-          .where((element) => element > 18 && element <= 24));
-      times.addAll(gameSetting.gameTime!.thursday!
-          .where((element) => element > 18 && element <= 24));
-      times.addAll(gameSetting.gameTime!.friday!
-          .where((element) => element > 18 && element <= 24));
-      times.addAll(gameSetting.gameTime!.saturday!
-          .where((element) => element > 18 && element <= 24));
-      times.addAll(gameSetting.gameTime!.sunday!
-          .where((element) => element > 18 && element <= 24));
-    }
-
-    return times;
   }
 
   void clearFilter() => setState(() {

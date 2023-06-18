@@ -49,14 +49,18 @@ class AvatarWidget {
                 child: Image.network(
                   imagePath,
                   fit: BoxFit.cover,
-                  // loadingBuilder: (context, child, loadingProgress) {
-                  //   return const Padding(
-                  //     padding: EdgeInsets.all(4),
-                  //     child: CircularProgressIndicator(
-                  //       strokeWidth: 2.5,
-                  //     ),
-                  //   );
-                  // },
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

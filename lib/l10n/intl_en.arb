@@ -228,5 +228,8 @@
   "txt_no_message": "No message in Conversation.",
   "txt_no_match_type": "There is no match type",
   "txt_no_playing_time": "There is no playing time",
-  "lbl_create_group": "Create group"
+  "lbl_create_group": "Create group",
+  "lbl_group_name": "Group name",
+  "lbl_update_group": "Update group chat",
+  "txt_err_group_name": "Group name is require"
 }

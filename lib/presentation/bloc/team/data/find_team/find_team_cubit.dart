@@ -22,7 +22,7 @@ class FindTeamCubit extends Cubit<FindTeamState> {
   }) async {
     final suggest = await TeamUseCase().find(
       pageIndex: pageIndex,
-      pageSize: pageIndex,
+      pageSize: pageSize,
       member: member,
       rank: rank,
       position: position,

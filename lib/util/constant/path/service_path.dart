@@ -39,6 +39,7 @@ class ServicePath {
   static const String saveUser = "$serviceHost/users/save";
   static const String listGroup = "$serviceHost/groups";
   static const String createGroup = "$serviceHost/groups/create";
+  static const String updateGroup = "$serviceHost/groups/update";
 
   ///File
   static const String file = "$serviceHost/file/create";

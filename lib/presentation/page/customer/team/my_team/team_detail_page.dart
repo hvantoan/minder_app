@@ -93,7 +93,7 @@ class _TeamDetailPageState extends State<TeamDetailPage> {
                         TeamChatPage(
                           appBarDisplay: false,
                           group: Group(
-                            id: "",
+                            id: state.team.groupId ?? "",
                             title: state.team.name,
                             chanelId: state.team.id,
                             lastMessage: "",

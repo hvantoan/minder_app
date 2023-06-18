@@ -107,375 +107,330 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
           final host =
               match.teamSide == 1 ? match.hostTeam : match.opposingTeam;
           return SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 24.0,
+                horizontal: 16.0,
+              ),
               child: (match.status ?? 0) == 1
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: Text(
-                            S.current.lbl_opposite_team,
-                            style: BaseTextStyle.label(),
-                          ),
-                        ),
-                        if (opposite!.stadium == null ||
-                            opposite.from == null ||
-                            opposite.to == null)
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(mediumPadding),
-                            margin: const EdgeInsets.only(
-                                top: mediumPadding + smallPadding,
-                                bottom: 20.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12.0),
-                                boxShadow: [BaseShadowStyle.common]),
-                            child: Text(
-                              S.current.txt_opponent_has_not_chosen,
-                              style:
-                                  BaseTextStyle.body1(color: BaseColor.grey500),
-                            ),
-                          )
-                        else
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            margin: const EdgeInsets.only(bottom: 20.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [BaseShadowStyle.common]),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AvatarWidget.base(
-                                    name: opposite.stadium!.name!,
-                                    imagePath: opposite.stadium!.avatar,
-                                    size: mediumAvatarSize),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 12),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          opposite.stadium!.name!,
-                                          style: BaseTextStyle.label(),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 2.0),
-                                          child: Text(
-                                            "${TimeHelper.formatDate(opposite.date.toString())} | ${opposite.from!.toInt() > 9 ? opposite.from!.toInt() : "0${opposite.from!.toInt()}"}:00",
-                                            style: BaseTextStyle.body1(
-                                                color: BaseColor.grey500),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 2.0),
-                                          child: Text(
-                                            opposite.stadium!.fullAddress!,
-                                            style: BaseTextStyle.body1(
-                                                color: BaseColor.grey500),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: Text(
-                            S.current.lbl_your_team,
-                            style: BaseTextStyle.label(),
-                          ),
-                        ),
-                        Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [BaseShadowStyle.common]),
-                            child: (widget.regency > 0)
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (host!.stadium != null)
-                                        GestureDetector(
-                                          onTap: () => selectStadium(host),
-                                          child: Container(
-                                            color: Colors.transparent,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                AvatarWidget.base(
-                                                    name: host.stadium!.name!,
-                                                    imagePath:
-                                                        host.stadium!.avatar,
-                                                    size: mediumAvatarSize),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 12),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          host.stadium!.name!,
-                                                          style: BaseTextStyle
-                                                              .label(),
-                                                        ),
-                                                        if (widget.regency == 0)
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 2.0),
-                                                            child: Text(
-                                                              "${TimeHelper.formatDate(host.date.toString())} | ${host.from!.toInt() > 9 ? host.from!.toInt() : "0${host.from!.toInt()}"}:00",
-                                                              style: BaseTextStyle.body1(
-                                                                  color: BaseColor
-                                                                      .grey500),
-                                                            ),
-                                                          ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 2.0),
-                                                          child: Text(
-                                                            host.stadium!
-                                                                .fullAddress!,
-                                                            style: BaseTextStyle
-                                                                .body1(
-                                                                    color: BaseColor
-                                                                        .grey500),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      else
-                                        ButtonWidget.primaryWhite(
-                                            onTap: () => selectStadium(host),
-                                            content:
-                                                S.current.btn_select_stadium),
-                                      ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              match.timeChoices?.length ?? 0,
-                                          itemBuilder: (context, index) =>
-                                              TimeChoiceWidget(
-                                                  timeChoice:
-                                                      match.timeChoices![index],
-                                                  matchId: match.id!,
-                                                  team: host)),
-                                    ],
-                                  )
-                                : (host!.stadium == null ||
-                                        host.from == null ||
-                                        host.to == null)
-                                    ? Container(
-                                        alignment: Alignment.centerLeft,
-                                        width: double.infinity,
-                                        padding:
-                                            const EdgeInsets.all(mediumPadding),
-                                        margin: const EdgeInsets.only(
-                                            top: mediumPadding + smallPadding,
-                                            bottom: 20.0),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                            boxShadow: [
-                                              BaseShadowStyle.common
-                                            ]),
-                                        child: Text(
-                                          S.current.txt_host_has_not_chosen,
-                                          style: BaseTextStyle.body1(
-                                              color: BaseColor.grey500),
-                                        ),
-                                      )
-                                    : Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(12),
-                                        margin:
-                                            const EdgeInsets.only(bottom: 20.0),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            boxShadow: [
-                                              BaseShadowStyle.common
-                                            ]),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                AvatarWidget.base(
-                                                    name: host.stadium!.name!,
-                                                    imagePath: opposite
-                                                        .stadium?.avatar,
-                                                    size: mediumAvatarSize),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 12),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          host.stadium!.name!,
-                                                          style: BaseTextStyle
-                                                              .label(),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 2.0),
-                                                          child: Text(
-                                                            "${TimeHelper.formatDate(host.date.toString())} | ${host.from!.toInt() > 9 ? host.from!.toInt() : "0${host.from!.toInt()}"}:00",
-                                                            style: BaseTextStyle
-                                                                .body1(
-                                                                    color: BaseColor
-                                                                        .grey500),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 2.0),
-                                                          child: Text(
-                                                            host.stadium!
-                                                                .fullAddress!,
-                                                            style: BaseTextStyle
-                                                                .body1(
-                                                                    color: BaseColor
-                                                                        .grey500),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ))
-                      ],
-                    )
-                  : Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [BaseShadowStyle.common]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              AvatarWidget.base(
-                                  name: host!.stadium!.name!,
-                                  imagePath: host.stadium!.avatar,
-                                  size: mediumAvatarSize),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        host.stadium!.name!,
-                                        style: BaseTextStyle.label(),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 2.0),
-                                        child: Text(
-                                          "${TimeHelper.formatDate(host.date.toString())} | ${host.from!.toInt() > 9 ? host.from!.toInt() : "0${host.from!.toInt()}"}:00",
-                                          style: BaseTextStyle.body1(
-                                              color: BaseColor.grey500),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 2.0),
-                                        child: Text(
-                                          host.stadium!.fullAddress!,
-                                          style: BaseTextStyle.body1(
-                                              color: BaseColor.grey500),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: Text(
-                              (match.status ?? 0) == 2
-                                  ? MatchHelper.calculateTime(
-                                              host.date.toString()) ==
-                                          0
-                                      ? S.current.txt_match_in_progress
-                                      : MatchHelper.calculateTime(
-                                                  host.date.toString()) ==
-                                              1
-                                          ? "${S.current.txt_match_start_in} ${MatchHelper.getTime(host.date.toString())}"
-                                          : S.current.txt_match_done
-                                  : S.current.txt_match_cancel,
-                              style: BaseTextStyle.body1(
-                                  color: (match.status ?? 0) == 2
-                                      ? MatchHelper.calculateTime(
-                                                  host.date.toString()) >
-                                              -1
-                                          ? BaseColor.green500
-                                          : BaseColor.grey500
-                                      : BaseColor.red500),
-                            ),
-                          )
-                        ],
-                      ),
-                    ));
+                  ? _caseOne(opposite, host, match)
+                  : _caseTwo(host, match));
         }
         return _shimmer();
       },
+    );
+  }
+
+  Container _caseTwo(MatchTeam? host, Match match) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 20.0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [BaseShadowStyle.common]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              AvatarWidget.base(
+                  name: host!.stadium!.name!,
+                  imagePath: host.stadium!.avatar,
+                  size: mediumAvatarSize),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        host.stadium!.name!,
+                        style: BaseTextStyle.label(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          "${TimeHelper.formatDate(host.date.toString())} | ${host.from!.toInt() > 9 ? host.from!.toInt() : "0${host.from!.toInt()}"}:00",
+                          style: BaseTextStyle.body1(color: BaseColor.grey500),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          host.stadium!.fullAddress!,
+                          style: BaseTextStyle.body1(color: BaseColor.grey500),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Text(
+              (match.status ?? 0) == 2
+                  ? MatchHelper.calculateTime(host.date.toString()) == 0
+                      ? S.current.txt_match_in_progress
+                      : MatchHelper.calculateTime(host.date.toString()) == 1
+                          ? "${S.current.txt_match_start_in} ${MatchHelper.getTime(host.date.toString())}"
+                          : S.current.txt_match_done
+                  : S.current.txt_match_cancel,
+              style: BaseTextStyle.body1(
+                  color: (match.status ?? 0) == 2
+                      ? MatchHelper.calculateTime(host.date.toString()) > -1
+                          ? BaseColor.green500
+                          : BaseColor.grey500
+                      : BaseColor.red500),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Column _caseOne(MatchTeam? opposite, MatchTeam? host, Match match) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Text(
+            S.current.lbl_opposite_team,
+            style: BaseTextStyle.label(),
+          ),
+        ),
+        if (opposite!.stadium == null ||
+            opposite.from == null ||
+            opposite.to == null)
+          Container(
+            alignment: Alignment.centerLeft,
+            width: double.infinity,
+            padding: const EdgeInsets.all(mediumPadding),
+            margin: const EdgeInsets.only(
+                top: mediumPadding + smallPadding, bottom: 20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [BaseShadowStyle.common],
+            ),
+            child: Text(
+              S.current.txt_opponent_has_not_chosen,
+              style: BaseTextStyle.body1(color: BaseColor.grey500),
+            ),
+          )
+        else
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [BaseShadowStyle.common],
+            ),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              AvatarWidget.base(
+                name: opposite.stadium!.name!,
+                imagePath: opposite.stadium!.avatar,
+                size: mediumAvatarSize,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          opposite.stadium!.name!,
+                          style: BaseTextStyle.label(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: Text(
+                            "${TimeHelper.formatDate(opposite.date.toString())} | ${opposite.from!.toInt() > 9 ? opposite.from!.toInt() : "0${opposite.from!.toInt()}"}:00",
+                            style: BaseTextStyle.body1(
+                              color: BaseColor.grey500,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: Text(
+                            opposite.stadium!.fullAddress!,
+                            style: BaseTextStyle.body1(
+                              color: BaseColor.grey500,
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              )
+            ]),
+          ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Text(
+            S.current.lbl_your_team,
+            style: BaseTextStyle.label(),
+          ),
+        ),
+        Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [BaseShadowStyle.common]),
+            child: (widget.regency > 0)
+                ? _viewOwner(host, match)
+                : _viewMember(host, opposite, match))
+      ],
+    );
+  }
+
+  Widget _viewMember(MatchTeam? host, MatchTeam? opposite, Match match) {
+    if (host!.stadium == null) {
+      return Container(
+        alignment: Alignment.centerLeft,
+        width: double.infinity,
+        padding: const EdgeInsets.all(mediumPadding),
+        margin: const EdgeInsets.only(
+            top: mediumPadding + smallPadding, bottom: 20.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+            boxShadow: [BaseShadowStyle.common]),
+        child: Text(
+          S.current.txt_host_has_not_chosen,
+          style: BaseTextStyle.body1(color: BaseColor.grey500),
+        ),
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: 20.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [BaseShadowStyle.common]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                AvatarWidget.base(
+                    name: host.stadium!.name!,
+                    imagePath: opposite!.stadium?.avatar,
+                    size: mediumAvatarSize),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          host.stadium!.name!,
+                          style: BaseTextStyle.label(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: Text(
+                            "${TimeHelper.formatDate(host.date.toString())} | ${host.from!.toInt() > 9 ? host.from!.toInt() : "0${host.from!.toInt()}"}:00",
+                            style: BaseTextStyle.body1(
+                              color: BaseColor.grey500,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: Text(
+                            host.stadium!.fullAddress!,
+                            style:
+                                BaseTextStyle.body1(color: BaseColor.grey500),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Column _viewOwner(MatchTeam? host, Match match) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (host!.stadium != null)
+          GestureDetector(
+            onTap: () => selectStadium(host),
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AvatarWidget.base(
+                    name: host.stadium!.name!,
+                    imagePath: host.stadium!.avatar,
+                    size: mediumAvatarSize,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            host.stadium!.name!,
+                            style: BaseTextStyle.label(),
+                          ),
+                          if (widget.regency == 0)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Text(
+                                "${TimeHelper.formatDate(host.date.toString())} | ${host.from!.toInt() > 9 ? host.from!.toInt() : "0${host.from!.toInt()}"}:00",
+                                style: BaseTextStyle.body1(
+                                    color: BaseColor.grey500),
+                              ),
+                            ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Text(
+                              host.stadium!.fullAddress!,
+                              style:
+                                  BaseTextStyle.body1(color: BaseColor.grey500),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        else
+          ButtonWidget.primaryWhite(
+            onTap: () => selectStadium(host),
+            content: S.current.btn_select_stadium,
+          ),
+        ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: match.timeChoices?.length ?? 0,
+            itemBuilder: (context, index) => TimeChoiceWidget(
+                timeChoice: match.timeChoices![index],
+                matchId: match.id!,
+                team: host)),
+      ],
     );
   }
 

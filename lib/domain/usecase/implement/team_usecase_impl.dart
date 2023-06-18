@@ -182,7 +182,7 @@ class TeamUseCase extends TeamUseCaseInterface {
   }) async {
     final response = await TeamRepository().find(
       pageIndex: pageIndex,
-      pageSize: pageIndex,
+      pageSize: pageSize,
       member: member,
       rank: rank,
       position: position,

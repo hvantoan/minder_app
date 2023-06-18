@@ -131,6 +131,7 @@ class _MatchTeamPageState extends State<MatchTeamPage> {
   }
 
   void findMoreTeams() {
+    GetIt.instance.get<FindTeamCubit>().clean();
     GetIt.instance.get<FindTeamCubit>().getTeams(teamId: widget.team.id);
     Navigator.push(
       context,

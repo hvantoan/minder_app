@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 import 'package:minder/core/failures/failures.dart';
 import 'package:minder/data/repository/interface/i_group_repository.dart';
@@ -21,5 +23,15 @@ class GroupRepository extends GroupRepositoryInterface {
   @override
   Future<void> create({required List<String> userIds}) async {
     await GroupAPI().create(userIds: userIds);
+  }
+
+  @override
+  Future<bool> update({
+    required String groupId,
+    required String groupName,
+    File? avatar,
+  }) async {
+    return await GroupAPI()
+        .update(groupId: groupId, groupName: groupName, avatar: avatar);
   }
 }

@@ -333,7 +333,12 @@ class _TeamSettingPageState extends State<TeamSettingPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => TeamPlayingTimePage(
-                                          me: me!,
+                                          me: me ??
+                                              Member(
+                                                  id: "",
+                                                  userId: "",
+                                                  teamId: "",
+                                                  regency: 0),
                                           team: team,
                                         ))),
                             title: S.current.lbl_view_detail,

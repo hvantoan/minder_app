@@ -228,5 +228,8 @@
   "txt_no_message": "Chưa có tin nhắn nào.",
   "txt_no_match_type": "Không có loại trận đấu nào",
   "txt_no_playing_time": "Không có thời gian thi đấu",
-  "lbl_create_group": "Tạo nhóm"
+  "lbl_create_group": "Tạo nhóm",
+  "lbl_group_name": "Tên nhóm",
+  "lbl_update_group": "Cập nhật nhóm chat",
+  "txt_err_group_name": "Tên nhóm không được để trống"
 }
