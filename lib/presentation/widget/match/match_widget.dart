@@ -148,9 +148,10 @@ class _MatchWidgetState extends State<MatchWidget> {
                             onTap: () => MatchRepository()
                                     .memberConfirm(thisMatch.id!, userId)
                                     .then((value) async {
+                                  GetIt.instance.get<MatchesCubit>().clean();
                                   await GetIt.instance
                                       .get<MatchesCubit>()
-                                      .getData(widget.team.id!);
+                                      .getData(widget.team.id);
                                 }),
                             content: S.current.btn_join,
                             buttonHeight: 32,
