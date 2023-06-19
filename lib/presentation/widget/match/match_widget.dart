@@ -163,11 +163,9 @@ class _MatchWidgetState extends State<MatchWidget> {
               else
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0),
-                  child: Expanded(
-                    child: ButtonWidget.tertiary(
-                      onTap: () {},
-                      content: S.current.btn_joined,
-                    ),
+                  child: ButtonWidget.tertiary(
+                    onTap: () {},
+                    content: S.current.btn_joined,
                   ),
                 ),
             if (isExpand)
