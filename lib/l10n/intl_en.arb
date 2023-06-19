@@ -231,5 +231,12 @@
   "lbl_create_group": "Create group",
   "lbl_group_name": "Group name",
   "lbl_update_group": "Update group chat",
-  "txt_err_group_name": "Group name is require"
+  "txt_err_group_name": "Group name is require",
+  "lbl_no_enough_number_member": "The number of members participating is not enough",
+  "txt_sure_to_choose_this_time": "Are you sure you want to choose this time?",
+  "btn_choose_another_time": "Choose another time",
+  "btn_join": "Join",
+  "lbl_want_confirm_match_info": "Do you want to confirm match information?",
+  "txt_wait_member_confirm": "Waiting for member to confirm",
+  "lbl_match_info_not_match": "Match information does not match"
 }

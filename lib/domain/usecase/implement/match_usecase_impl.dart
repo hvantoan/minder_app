@@ -56,13 +56,4 @@ class MatchUseCase extends MatchUseCaseInterface {
     }
     return Right(response.right);
   }
-
-  @override
-  Future<Either<Failures, void>> check(String matchId) async {
-    final response = await MatchRepository().check(matchId);
-    if (response.isLeft) {
-      return Left(response.left);
-    }
-    return Right(response.right);
-  }
 }

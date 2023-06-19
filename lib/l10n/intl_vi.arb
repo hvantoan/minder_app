@@ -231,5 +231,12 @@
   "lbl_create_group": "Tạo nhóm",
   "lbl_group_name": "Tên nhóm",
   "lbl_update_group": "Cập nhật nhóm chat",
-  "txt_err_group_name": "Tên nhóm không được để trống"
+  "txt_err_group_name": "Tên nhóm không được để trống",
+  "lbl_no_enough_number_member": "Số lượng thành viên nhóm tham gia không đủ",
+  "txt_sure_to_choose_this_time": "Bạn chắc chắn muốn chọn thời gian này?",
+  "btn_choose_another_time": "Chọn thời gian khác",
+  "btn_join": "Tham gia",
+  "lbl_want_confirm_match_info": "Bạn muốn xác nhận thông tin trận đấu?",
+  "txt_wait_member_confirm": "Chờ thành viên xác nhận",
+  "lbl_match_info_not_match": "Thông tin trận đấu chưa khớp"
 }

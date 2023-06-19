@@ -15,6 +15,4 @@ abstract class MatchUseCaseInterface {
 
   Future<Either<Failures, void>> selectStadium(
       String matchId, String stadiumId, String teamId);
-
-  Future<Either<Failures, void>> check(String matchId);
 }

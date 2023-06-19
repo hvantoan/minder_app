@@ -35,7 +35,8 @@ class MatchRepository extends MatchRepositoryInterface {
   Future<Either<Failures, match.Match>> getMatchById(String matchId) async {
     try {
       final response = await MatchAPI().getMatchById(matchId);
-      return Right(match.Match.fromModel(response));
+      final result = match.Match.fromModel(response);
+      return Right(result);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));
     }
@@ -64,9 +65,32 @@ class MatchRepository extends MatchRepositoryInterface {
   }
 
   @override
-  Future<Either<Failures, void>> check(String matchId) async {
+  Future<Either<Failures, void>> addTimeOption(
+      String matchId, DateTime date, num from, num to) async {
     try {
-      await MatchAPI().check(matchId);
+      await MatchAPI().addTimeOption(matchId, date, from, to);
+      return const Right(null);
+    } catch (e) {
+      return Left(FailuresHelper.fromCommonException(e));
+    }
+  }
+
+  @override
+  Future<Either<Failures, void>> confirmSettingMatch(
+      String matchId, String teamId) async {
+    try {
+      await MatchAPI().confirmSettingMatch(matchId, teamId);
+      return const Right(null);
+    } catch (e) {
+      return Left(FailuresHelper.fromCommonException(e));
+    }
+  }
+
+  @override
+  Future<Either<Failures, void>> memberConfirm(
+      String matchId, String userId) async {
+    try {
+      await MatchAPI().memberConfirm(matchId, userId);
       return const Right(null);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));

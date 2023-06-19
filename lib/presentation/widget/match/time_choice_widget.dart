@@ -53,7 +53,7 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
                   e,
                   widget.team.teamId!,
                   context);
-            });
+            }, context);
           }).toList()
         ],
       ),
@@ -67,6 +67,6 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
         .get<MatchControllerCubit>()
         .selectTime(matchId, date, dayOfWeek, timeOption, teamId)
         .then((value) =>
-            GetIt.instance.get<MatchControllerCubit>().check(matchId));
+            GetIt.instance.get<LoadingCoverController>().off(context));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:minder/data/model/match/participant_model.dart';
 import 'package:minder/data/model/personal/stadium_model.dart';
 
 class MatchModel {
@@ -7,9 +8,13 @@ class MatchModel {
   int? status;
   String? selectedDate;
   int? teamSide;
+  StadiumModel? stadium;
   MatchTeamModel? hostTeam;
   MatchTeamModel? opposingTeam;
   List<TimeChoiceModel>? timeChoices;
+  num? from;
+  num? to;
+  List<ParticipantModel>? participants;
 
   MatchModel(
       this.id,
@@ -18,9 +23,13 @@ class MatchModel {
       this.status,
       this.selectedDate,
       this.teamSide,
+      this.stadium,
       this.hostTeam,
       this.opposingTeam,
-      this.timeChoices);
+      this.timeChoices,
+      this.from,
+      this.to,
+      this.participants);
 
   MatchModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -29,6 +38,10 @@ class MatchModel {
     status = json["status"];
     selectedDate = json["selectedDate"];
     teamSide = json["teamSide"];
+    from = json["from"];
+    to = json["to"];
+    stadium =
+        json["stadium"] != null ? StadiumModel.fromJson(json["stadium"]) : null;
     hostTeam = json["hostTeam"] != null
         ? MatchTeamModel.fromJson(json["hostTeam"])
         : null;
@@ -38,6 +51,11 @@ class MatchModel {
     timeChoices = json["timeChooices"] != null
         ? (json["timeChooices"] as List)
             .map((e) => TimeChoiceModel.fromJson(e))
+            .toList()
+        : [];
+    participants = json["participants"] != null
+        ? (json["participants"] as List)
+            .map((e) => ParticipantModel.fromJson(e))
             .toList()
         : [];
   }
@@ -54,6 +72,7 @@ class MatchTeamModel {
   String? hostMatch;
   String? opposingMatch;
   StadiumModel? stadium;
+  bool? hasConfirm;
   String? teamName;
   String? avatar;
   double? latitude;
@@ -67,6 +86,7 @@ class MatchTeamModel {
       this.from,
       this.to,
       this.date,
+      this.hasConfirm,
       this.hostMatch,
       this.opposingMatch,
       this.stadium,
@@ -83,6 +103,7 @@ class MatchTeamModel {
     from = json["from"];
     date = json["date"] != null ? DateTime.parse(json["date"]) : null;
     to = json["to"];
+    hasConfirm = json["hasConfirm"];
     stadium =
         json["stadium"] != null ? StadiumModel.fromJson(json["stadium"]) : null;
     teamName = json["teamName"];

@@ -48,6 +48,7 @@ class ServicePath {
   static const String stadium = "$serviceHost/stadium";
   static const String stadiumList = "list";
   static const String stadiumGet = "get";
+
   static String stadiumSuggest({required String matchId}) =>
       "$serviceHost/stadium/$matchId/suggest-for-match";
 
@@ -56,5 +57,7 @@ class ServicePath {
   static const String swipe = "swipe-card";
   static const String selectTime = "selected-time";
   static const String selectStadium = "selected-stadium";
-  static const String check = "check";
+  static const String confirmSettingMatch = "confirm-setting-match";
+  static const String addTimeOption = "add-time-opption";
+  static const String memberConfirm = "member-confirm";
 }

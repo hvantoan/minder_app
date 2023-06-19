@@ -8,9 +8,29 @@ class MatchHelper {
   static mapStatusToText(match.Match match, String myTeamId) {
     switch (match.status) {
       case 1:
+        final host = match.hostTeam!.teamId == myTeamId
+            ? match.hostTeam
+            : match.opposingTeam;
+        if (host?.hasConfirm ?? false) {
+          return Text(
+            S.current.txt_wait_member_confirm,
+            style: BaseTextStyle.body1(color: BaseColor.green500),
+          );
+        }
         return Text(S.current.txt_setting_up,
             style: BaseTextStyle.body1(color: BaseColor.blue500));
       case 2:
+        final host = match.hostTeam!.teamId == myTeamId
+            ? match.hostTeam
+            : match.opposingTeam;
+        if (!(host!.hasConfirm ?? false)) {
+          return Text(S.current.txt_setting_up,
+              style: BaseTextStyle.body1(color: BaseColor.blue500));
+        }
+        return Text(
+          S.current.txt_wait_member_confirm,
+          style: BaseTextStyle.body1(color: BaseColor.green500),
+        );
         final state = calculateTime(match.hostTeam!.date.toString());
         if (state == 0) {
           return Text(S.current.txt_playing,

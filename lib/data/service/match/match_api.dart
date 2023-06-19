@@ -94,10 +94,45 @@ class MatchAPI {
     }
   }
 
-  Future<void> check(String matchId) async {
+  Future<void> confirmSettingMatch(String matchId, String teamId) async {
     try {
       await BaseAPIService.get(
-        uri: "${ServicePath.matches}/$matchId/${ServicePath.check}",
+        uri:
+            "${ServicePath.matches}/$matchId/${ServicePath.confirmSettingMatch}?teamId=$teamId",
+        withToken: true,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> addTimeOption(
+    String matchId,
+    DateTime date,
+    num from,
+    num to,
+  ) async {
+    try {
+      await BaseAPIService.post(
+        uri: "${ServicePath.matches}/${ServicePath.addTimeOption}",
+        withToken: true,
+        params: {
+          "matchId": matchId,
+          "date": date.toUtc().toString(),
+          "from": from,
+          "to": to
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> memberConfirm(String matchId, String userId) async {
+    try {
+      await BaseAPIService.get(
+        uri:
+            "${ServicePath.matches}/$matchId/${ServicePath.memberConfirm}?userId=$userId",
         withToken: true,
       );
     } catch (e) {
