@@ -79,8 +79,8 @@ class _MatchTeamPageState extends State<MatchTeamPage> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: state.matches.length,
-                      itemBuilder: (context, index) => MatchWidget.base(
-                          state.matches[index], context, widget.team))
+                      itemBuilder: (context, index) => MatchWidget(
+                          thisMatch: state.matches[index], team: widget.team))
                 else
                   Center(
                     child: Text(

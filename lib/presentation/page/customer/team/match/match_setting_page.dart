@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:minder/data/repository/implement/match_repository.dart';
 import 'package:minder/domain/entity/match/match.dart';
 import 'package:minder/generated/l10n.dart';
 import 'package:minder/presentation/bloc/match/controller/match_controller_cubit.dart';
 import 'package:minder/presentation/bloc/match/data/match/match_cubit.dart';
+import 'package:minder/presentation/bloc/match/data/matches/matches_cubit.dart';
 import 'package:minder/presentation/page/customer/team/all_team_page.dart';
 import 'package:minder/presentation/page/customer/team/match/select_stadium_page.dart';
 import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/presentation/widget/button/button_widget.dart';
+import 'package:minder/presentation/widget/dialog/dialog_widget.dart';
 import 'package:minder/presentation/widget/match/time_choice_widget.dart';
 import 'package:minder/presentation/widget/sheet/sheet_widget.dart';
 import 'package:minder/presentation/widget/shimmer/shimmer_widget.dart';
@@ -39,12 +42,56 @@ class MatchSettingPage extends StatefulWidget {
 }
 
 class _MatchSettingPageState extends State<MatchSettingPage> {
-  TimeOption? timeOption;
+  bool isMatched = false;
+  bool isConfirmed = true;
+  bool isDone = false;
 
   @override
   void initState() {
     GetIt.instance.get<MatchCubit>().clean();
-    GetIt.instance.get<MatchControllerCubit>().check(widget.match.id!);
+    GetIt.instance.get<MatchCubit>().getMatchById(widget.match.id!);
+    GetIt.instance.get<MatchCubit>().stream.listen((event) {
+      if (!mounted) return;
+      if (event is MatchSuccess) {
+        setState(() {
+          isMatched = false;
+          isDone = true;
+        });
+        final host = event.match.hostTeam;
+        final opposite = event.match.opposingTeam;
+        setState(() {
+          isConfirmed = (host!.teamId == widget.teamId
+                  ? host.hasConfirm
+                  : opposite?.hasConfirm) ??
+              false;
+        });
+        if (!(host?.hasConfirm ?? false) && !(opposite?.hasConfirm ?? false)) {
+          setState(() {
+            isMatched = true;
+          });
+          return;
+        }
+        if (host!.stadiumId == opposite!.stadiumId &&
+            host.from != null &&
+            opposite.from != null &&
+            host.from == opposite.from &&
+            host.to != null &&
+            opposite.to != null &&
+            host.to == opposite.to &&
+            host.date != null &&
+            opposite.date != null &&
+            TimeHelper.formatDate(host.date.toString()) ==
+                TimeHelper.formatDate(opposite.date.toString())) {
+          setState(() {
+            isMatched = true;
+          });
+        } else {
+          setState(() {
+            isMatched = false;
+          });
+        }
+      }
+    });
     GetIt.instance.get<MatchControllerCubit>().stream.listen((event) async {
       if (!mounted) return;
       if (event is MatchControllerSuccess) {
@@ -81,6 +128,100 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
         S.current.lbl_match_setting,
         style: BaseTextStyle.label(),
       ),
+      actions: [
+        if (isDone)
+          if (!isConfirmed)
+            Center(
+              child: ButtonWidget.text(
+                  onTap: () async {
+                    if (isMatched) {
+                      DialogWidget.show(
+                          context: context,
+                          alert: DialogWidget.base(
+                              title: S.current.lbl_want_confirm_match_info,
+                              actions: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12.0),
+                                  child: ButtonWidget.primary(
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        GetIt.instance
+                                            .get<LoadingCoverController>()
+                                            .on(context);
+                                        await MatchRepository()
+                                            .confirmSettingMatch(
+                                                widget.match.id!, widget.teamId)
+                                            .then((value) async {
+                                          await GetIt.instance
+                                              .get<MatchCubit>()
+                                              .getMatchById(widget.match.id!);
+                                          GetIt.instance
+                                              .get<MatchesCubit>()
+                                              .clean();
+                                          await GetIt.instance
+                                              .get<MatchesCubit>()
+                                              .getData(widget.teamId);
+                                          if (mounted) {
+                                            GetIt.instance
+                                                .get<LoadingCoverController>()
+                                                .off(context);
+                                          }
+                                        });
+                                      },
+                                      content: S.current.btn_agree),
+                                ),
+                                ButtonWidget.secondary(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    content: S.current.btn_cancel),
+                              ]));
+                    } else {
+                      DialogWidget.show(
+                          context: context,
+                          alert: DialogWidget.base(
+                              title: S.current.lbl_match_info_not_match,
+                              actions: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12.0),
+                                  child: ButtonWidget.secondary(
+                                      onTap: () => Navigator.pop(context),
+                                      content: S.current.btn_agree),
+                                ),
+                              ]));
+                    }
+                  },
+                  content: S.current.btn_done,
+                  context: context),
+            )
+          else
+            Center(
+              child: ButtonWidget.text(
+                  onTap: () async {
+                    GetIt.instance.get<LoadingCoverController>().on(context);
+                    await MatchRepository()
+                        .confirmSettingMatch(widget.match.id!, widget.teamId)
+                        .then((value) async {
+                      await GetIt.instance
+                          .get<MatchCubit>()
+                          .getMatchById(widget.match.id!);
+                      GetIt.instance.get<MatchesCubit>().clean();
+                      await GetIt.instance
+                          .get<MatchesCubit>()
+                          .getData(widget.teamId);
+                      if (mounted) {
+                        GetIt.instance
+                            .get<LoadingCoverController>()
+                            .off(context);
+                      }
+                    });
+                  },
+                  content: S.current.btn_cancel,
+                  context: context),
+            )
+      ],
       backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
@@ -102,16 +243,16 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
         changeDone();
         if (state is MatchSuccess) {
           final match = state.match;
-          final opposite =
-              match.teamSide == 1 ? match.opposingTeam : match.hostTeam;
           final host =
-              match.teamSide == 1 ? match.hostTeam : match.opposingTeam;
+              match.teamSide == 2 ? match.opposingTeam : match.hostTeam;
+          final opposite =
+              match.teamSide == 2 ? match.hostTeam : match.opposingTeam;
           return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
                 vertical: 24.0,
                 horizontal: 16.0,
               ),
-              child: (match.status ?? 0) == 1
+              child: (match.status ?? 0) <= 2 && !isConfirmed
                   ? _caseOne(opposite, host, match)
                   : _caseTwo(host, match));
         }
@@ -169,23 +310,8 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Text(
-              (match.status ?? 0) == 2
-                  ? MatchHelper.calculateTime(host.date.toString()) == 0
-                      ? S.current.txt_match_in_progress
-                      : MatchHelper.calculateTime(host.date.toString()) == 1
-                          ? "${S.current.txt_match_start_in} ${MatchHelper.getTime(host.date.toString())}"
-                          : S.current.txt_match_done
-                  : S.current.txt_match_cancel,
-              style: BaseTextStyle.body1(
-                  color: (match.status ?? 0) == 2
-                      ? MatchHelper.calculateTime(host.date.toString()) > -1
-                          ? BaseColor.green500
-                          : BaseColor.grey500
-                      : BaseColor.red500),
-            ),
-          )
+              padding: const EdgeInsets.only(top: 20.0),
+              child: MatchHelper.mapStatusToText(match, widget.teamId))
         ],
       ),
     );
@@ -422,6 +548,63 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
             onTap: () => selectStadium(host),
             content: S.current.btn_select_stadium,
           ),
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: ButtonWidget.primaryWhite(
+            onTap: () async {
+              final date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(DateTime.now().year + 100),
+              );
+
+              TimeOfDay? from;
+              if (date != null) {
+                if (mounted) {
+                  from = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay(
+                          hour: (TimeHelper.formatDate(date.toString()) ==
+                                  TimeHelper.formatDate(
+                                      DateTime.now().toString())
+                              ? DateTime.now().hour + 1
+                              : date.hour),
+                          minute: 0));
+                }
+              } else {
+                return;
+              }
+              TimeOfDay? to;
+              if (from != null) {
+                if (mounted) {
+                  to = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay(hour: from.hour + 2, minute: 0));
+                }
+              } else {
+                return;
+              }
+
+              if (to != null) {
+                if (mounted) {
+                  GetIt.instance.get<LoadingCoverController>().on(context);
+                }
+                await MatchRepository()
+                    .addTimeOption(widget.match.id!, date, from.hour, to.hour)
+                    .then((value) async {
+                  await GetIt.instance
+                      .get<MatchCubit>()
+                      .getMatchById(widget.match.id!);
+                });
+                if (mounted) {
+                  GetIt.instance.get<LoadingCoverController>().off(context);
+                }
+              }
+            },
+            content: S.current.btn_choose_another_time,
+          ),
+        ),
         ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -480,9 +663,8 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
       GetIt.instance
           .get<MatchControllerCubit>()
           .selectStadium(widget.match.id!, result, team.teamId!)
-          .then((value) => GetIt.instance
-              .get<MatchControllerCubit>()
-              .check(widget.match.id!));
+          .then((value) =>
+              GetIt.instance.get<LoadingCoverController>().off(context));
     }
   }
 

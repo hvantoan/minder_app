@@ -78,6 +78,7 @@ class ButtonWidget {
   static Widget primary({
     required VoidCallback onTap,
     required String content,
+    double? buttonHeight,
     String? prefixIconPath,
     bool isDirection = false,
     bool isDisable = false,
@@ -96,6 +97,7 @@ class ButtonWidget {
     return ButtonWidget.base(
         onTap: onTap,
         content: content,
+        buttonHeight: buttonHeight,
         prefixIconPath: prefixIconPath,
         suffixIconPath: isDirection ? IconPath.chevronRightLine : null,
         contentColor: isDisable ? BaseColor.grey300 : null,
@@ -110,6 +112,7 @@ class ButtonWidget {
     bool isDirection = false,
     bool isDisable = false,
     bool isExpand = true,
+    double? buttonHeight,
   }) {
     if (!(prefixIconPath == null || isDirection == false)) {
       return Container(
@@ -125,6 +128,7 @@ class ButtonWidget {
         onTap: onTap,
         content: content,
         prefixIconPath: prefixIconPath,
+        buttonHeight: buttonHeight,
         suffixIconPath: isDirection ? IconPath.chevronRightLine : null,
         contentColor: isDisable ? BaseColor.grey300 : BaseColor.green500,
         backgroundColor: isDisable ? BaseColor.grey200 : Colors.white,
@@ -133,18 +137,19 @@ class ButtonWidget {
         isExpand: isExpand);
   }
 
-  static Widget secondary({
-    required VoidCallback onTap,
-    required String content,
-    String? prefixIconPath,
-    bool isDirection = false,
-    bool isDisable = false,
-    bool isExpand = true,
-  }) {
+  static Widget secondary(
+      {required VoidCallback onTap,
+      required String content,
+      String? prefixIconPath,
+      bool isDirection = false,
+      bool isDisable = false,
+      bool isExpand = true,
+      double? buttonHeight}) {
     return ButtonWidget.base(
         onTap: onTap,
         content: content,
         prefixIconPath: prefixIconPath,
+        buttonHeight: buttonHeight,
         suffixIconPath: isDirection ? IconPath.chevronRightLine : null,
         contentColor: isDisable ? BaseColor.grey400 : BaseColor.grey900,
         backgroundColor: isDisable ? BaseColor.grey200 : BaseColor.grey100,
@@ -157,6 +162,7 @@ class ButtonWidget {
     required String content,
     Color? contentColor,
     String? prefixIconPath,
+    double? buttonHeight,
     bool isDirection = false,
     bool isDisable = false,
     bool isExpand = true,
@@ -167,9 +173,10 @@ class ButtonWidget {
         prefixIconPath: prefixIconPath,
         suffixIconPath: isDirection ? IconPath.chevronRightLine : null,
         contentColor:
-            isDisable ? BaseColor.grey400 : contentColor ?? BaseColor.grey900,
-        backgroundColor: isDisable ? BaseColor.grey200 : Colors.white,
+            isDisable ? BaseColor.grey400 : contentColor ?? BaseColor.grey500,
+        backgroundColor: isDisable ? BaseColor.grey200 : BaseColor.grey50,
         borderRadius: isExpand ? BorderRadius.circular(100.0) : null,
+        buttonHeight: buttonHeight,
         isExpand: isExpand);
   }
 

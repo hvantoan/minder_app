@@ -16,5 +16,15 @@ abstract class MatchRepositoryInterface {
   Future<Either<Failures, void>> selectStadium(
       String matchId, String stadiumId, String teamId);
 
-  Future<Either<Failures, void>> check(String matchId);
+  Future<Either<Failures, void>> confirmSettingMatch(
+      String matchId, String teamId);
+
+  Future<Either<Failures, void>> addTimeOption(
+    String matchId,
+    DateTime date,
+    num from,
+    num to,
+  );
+
+  Future<Either<Failures, void>> memberConfirm(String matchId, String userId);
 }

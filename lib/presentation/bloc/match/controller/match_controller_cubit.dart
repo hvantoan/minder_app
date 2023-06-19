@@ -43,15 +43,5 @@ class MatchControllerCubit extends Cubit<MatchControllerState> {
     emit(MatchControllerSuccess());
   }
 
-  Future<void> check(String matchId) async {
-    final response = await MatchUseCase().check(matchId);
-    if (response.isLeft) {
-      emit(MatchControllerFailure());
-      return;
-    }
-
-    emit(MatchControllerSuccess());
-  }
-
   void clean() => emit(MatchControllerInitial());
 }

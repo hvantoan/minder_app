@@ -1,4 +1,5 @@
 import 'package:minder/data/model/match/match_model.dart';
+import 'package:minder/domain/entity/participant/participant.dart';
 import 'package:minder/domain/entity/stadium/stadium.dart';
 
 class Match {
@@ -8,9 +9,13 @@ class Match {
   int? status;
   String? selectedDate;
   int? teamSide;
+  Stadium? stadium;
   MatchTeam? hostTeam;
   MatchTeam? opposingTeam;
   List<TimeChoice>? timeChoices;
+  num? from;
+  num? to;
+  List<Participant>? participants;
 
   Match(
       this.id,
@@ -19,9 +24,13 @@ class Match {
       this.status,
       this.selectedDate,
       this.teamSide,
+      this.stadium,
       this.hostTeam,
       this.opposingTeam,
-      this.timeChoices);
+      this.timeChoices,
+      this.from,
+      this.to,
+      this.participants);
 
   Match.fromModel(MatchModel matchModel) {
     id = matchModel.id;
@@ -30,6 +39,11 @@ class Match {
     status = matchModel.status;
     selectedDate = matchModel.selectedDate;
     teamSide = matchModel.teamSide;
+    from = matchModel.from;
+    to = matchModel.to;
+    stadium = matchModel.stadium != null
+        ? Stadium.fromModel(matchModel.stadium!)
+        : null;
     hostTeam = matchModel.hostTeam != null
         ? MatchTeam.fromModel(matchModel.hostTeam!)
         : null;
@@ -38,6 +52,8 @@ class Match {
         : null;
     timeChoices =
         matchModel.timeChoices!.map((e) => TimeChoice.fromModel(e)).toList();
+    participants =
+        matchModel.participants!.map((e) => Participant.fromModel(e)).toList();
   }
 }
 
@@ -52,6 +68,7 @@ class MatchTeam {
   String? hostMatch;
   String? opposingMatch;
   Stadium? stadium;
+  bool? hasConfirm;
   String? teamName;
   String? avatar;
   double? latitude;
@@ -65,6 +82,7 @@ class MatchTeam {
       this.from,
       this.to,
       this.date,
+      this.hasConfirm,
       this.hostMatch,
       this.opposingMatch,
       this.stadium,
@@ -81,6 +99,7 @@ class MatchTeam {
     from = matchTeamModel.from;
     to = matchTeamModel.to;
     date = matchTeamModel.date;
+    hasConfirm = matchTeamModel.hasConfirm;
     stadium = matchTeamModel.stadium != null
         ? Stadium.fromModel(matchTeamModel.stadium!)
         : null;
