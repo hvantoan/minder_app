@@ -244,9 +244,9 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
         if (state is MatchSuccess) {
           final match = state.match;
           final host =
-              match.teamSide == 1 ? match.opposingTeam : match.hostTeam;
+              match.teamSide == 2 ? match.opposingTeam : match.hostTeam;
           final opposite =
-              match.teamSide == 1 ? match.hostTeam : match.opposingTeam;
+              match.teamSide == 2 ? match.hostTeam : match.opposingTeam;
           return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
                 vertical: 24.0,

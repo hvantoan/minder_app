@@ -12,10 +12,14 @@ class TimeOptionWidget {
   static base(TimeOption timeOption, bool isSelected, VoidCallback? onTap,
       BuildContext context) {
     final count = timeOption.memberCount ?? 0;
-    final bool isValid = count > 5;
+    final bool isValid = count == 0 ? true : count > 5;
     return GestureDetector(
       onTap: isValid
           ? () {
+              if (count == 0) {
+                onTap!.call();
+                return;
+              }
               if (count > 5 && count < 10) {
                 DialogWidget.show(
                   context: context,
@@ -36,7 +40,6 @@ class TimeOptionWidget {
                 );
                 return;
               }
-              onTap!.call();
             }
           : null,
       child: Container(
@@ -61,20 +64,25 @@ class TimeOptionWidget {
                         : (isValid ? null : BaseColor.grey500)),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 6.0),
-              child: Text(
-                timeOption.memberCount?.toString() ?? "",
-                style: BaseTextStyle.body1(
-                    color: isSelected
-                        ? Colors.white
-                        : (isValid ? null : BaseColor.grey500)),
-              ),
-            ),
-            BaseIcon.base(IconPath.userLine,
-                color: isSelected
-                    ? Colors.white
-                    : (isValid ? null : BaseColor.grey500))
+            if (timeOption.memberCount != 0)
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 6.0),
+                    child: Text(
+                      timeOption.memberCount?.toString() ?? "",
+                      style: BaseTextStyle.body1(
+                          color: isSelected
+                              ? Colors.white
+                              : (isValid ? null : BaseColor.grey500)),
+                    ),
+                  ),
+                  BaseIcon.base(IconPath.userLine,
+                      color: isSelected
+                          ? Colors.white
+                          : (isValid ? null : BaseColor.grey500))
+                ],
+              )
           ],
         ),
       ),

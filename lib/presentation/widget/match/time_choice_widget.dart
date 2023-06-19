@@ -40,6 +40,12 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
             ),
           ),
           ...widget.timeChoice.options!.map((e) {
+            print(widget.team.selectedDayOfWeek);
+            print(widget.timeChoice.dayOfWeek);
+            print(widget.team.from);
+            print(e.from);
+            print(widget.team.to);
+            print(e.to);
             return TimeOptionWidget.base(
                 e,
                 ((widget.team.selectedDayOfWeek ?? -1) ==
@@ -63,7 +69,7 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
   void _selectTime(String matchId, DateTime date, num dayOfWeek,
       TimeOption timeOption, String teamId, BuildContext context) async {
     GetIt.instance.get<LoadingCoverController>().on(context);
-    GetIt.instance
+    await GetIt.instance
         .get<MatchControllerCubit>()
         .selectTime(matchId, date, dayOfWeek, timeOption, teamId)
         .then((value) =>
