@@ -238,5 +238,6 @@
   "btn_join": "Join",
   "lbl_want_confirm_match_info": "Do you want to confirm match information?",
   "txt_wait_member_confirm": "Waiting for member to confirm",
-  "lbl_match_info_not_match": "Match information does not match"
+  "lbl_match_info_not_match": "Match information does not match",
+  "btn_joined": "Joined"
 }

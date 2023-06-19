@@ -238,5 +238,6 @@
   "btn_join": "Tham gia",
   "lbl_want_confirm_match_info": "Bạn muốn xác nhận thông tin trận đấu?",
   "txt_wait_member_confirm": "Chờ thành viên xác nhận",
-  "lbl_match_info_not_match": "Thông tin trận đấu chưa khớp"
+  "lbl_match_info_not_match": "Thông tin trận đấu chưa khớp",
+  "btn_joined": "Đã tham gia"
 }

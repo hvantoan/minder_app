@@ -162,6 +162,7 @@ class ButtonWidget {
     required String content,
     Color? contentColor,
     String? prefixIconPath,
+    double? buttonHeight,
     bool isDirection = false,
     bool isDisable = false,
     bool isExpand = true,
@@ -172,9 +173,10 @@ class ButtonWidget {
         prefixIconPath: prefixIconPath,
         suffixIconPath: isDirection ? IconPath.chevronRightLine : null,
         contentColor:
-            isDisable ? BaseColor.grey400 : contentColor ?? BaseColor.grey900,
-        backgroundColor: isDisable ? BaseColor.grey200 : Colors.white,
+            isDisable ? BaseColor.grey400 : contentColor ?? BaseColor.grey500,
+        backgroundColor: isDisable ? BaseColor.grey200 : BaseColor.grey50,
         borderRadius: isExpand ? BorderRadius.circular(100.0) : null,
+        buttonHeight: buttonHeight,
         isExpand: isExpand);
   }
 
