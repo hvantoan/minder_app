@@ -17,6 +17,7 @@ class Message {
   late String? avatar;
   late String? name;
   late String? userId;
+  late String? imagePath;
 
   Message({
     this.id,
@@ -31,6 +32,7 @@ class Message {
     this.avatar,
     this.userId,
     this.name,
+    this.imagePath,
   });
 
   toDisplayTime() {
@@ -57,6 +59,7 @@ class Message {
     avatar = messageModel.avatar ?? "";
     name = messageModel.name ?? "";
     userId = messageModel.userId ?? "";
+    imagePath = messageModel.imagePath ?? "";
   }
 
   factory Message.fromMap(Map<String, dynamic> map) {

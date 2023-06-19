@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,23 +33,17 @@ class _ChatInputState extends State<ChatInput> {
   bool _imageShowing = false;
   final TextEditingController _textMessage = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  Uint8List? image;
 
   @override
   void initState() {
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         if (_emojiShowing) {
-          GetIt.instance
-              .get<ChatCubit>()
-              .changeDisplayEmojiPicker(_emojiShowing);
+          GetIt.instance.get<ChatCubit>().changeDisplayEmojiPicker(false);
+        } else if (_imageShowing) {
+          GetIt.instance.get<ChatCubit>().changeDisplayImagePicker(false);
         }
-
-        if (_imageShowing) {
-          GetIt.instance
-              .get<ChatCubit>()
-              .changeDisplayImagePicker(_imageShowing);
-        }
-        if (widget.onFocus != null) widget.onFocus;
       }
     });
     super.initState();
@@ -57,33 +53,23 @@ class _ChatInputState extends State<ChatInput> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double bottom = MediaQuery.of(context).viewInsets.bottom;
-    return BlocBuilder<ChatCubit, ChatState>(
-      builder: (context, state) {
-        if (state is SendButtonState) {
-          _hasSend = state.hasSend;
-        }
+    return BlocListener<ChatCubit, ChatState>(
+        listener: (context, state) {
+          if (state is SendButtonState) {
+            _hasSend = state.hasSend;
+            setState(() {});
+          }
 
-        if (state is EmojiPickerDisplayState) {
-          Future.delayed(Duration(
-                  milliseconds:
-                      state.emojiShowing && _focusNode.hasFocus ? 5 : 0))
-              .then((value) {
-            if (state.emojiShowing) {
-              _imageShowing = false;
-            }
-            _emojiShowing = state.emojiShowing;
-          });
-        }
-
-        if (state is ImagePickerState) {
-          Future.delayed(Duration(
-            milliseconds: state.imageShowing && _focusNode.hasFocus ? 5 : 0,
-          )).then((value) {
-            _imageShowing = state.imageShowing;
-            _emojiShowing = false;
-          });
-        }
-        return Container(
+          if (state is ChangeEventState) {
+            Future.delayed(const Duration(milliseconds: 5)).then((_) {
+              _emojiShowing = state.emojiShowing;
+              _imageShowing = state.imageShowing;
+              print("$_emojiShowing - $_imageShowing");
+              setState(() {});
+            });
+          }
+        },
+        child: Container(
           padding: EdgeInsets.only(
               bottom: bottom +
                   (_focusNode.hasPrimaryFocus
@@ -103,12 +89,10 @@ class _ChatInputState extends State<ChatInput> {
                   child: Row(children: [
                     GestureDetector(
                       onTap: () {
-                        if (_focusNode.hasFocus) {
-                          _focusNode.unfocus();
-                        }
+                        _focusNode.unfocus();
                         GetIt.instance
                             .get<ChatCubit>()
-                            .changeDisplayImagePicker(_imageShowing);
+                            .changeDisplayImagePicker(!_imageShowing);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -130,11 +114,7 @@ class _ChatInputState extends State<ChatInput> {
                         textInputAction: TextInputAction.newline,
                         keyboardType: TextInputType.multiline,
                         focusNode: _focusNode,
-                        onChanged: (value) {
-                          GetIt.instance
-                              .get<ChatCubit>()
-                              .changeButtonSendState(value);
-                        },
+                        onChanged: (_) => _updateButtomSend(),
                         decoration: InputDecoration(
                           counterText: "",
                           fillColor: BaseColor.grey100,
@@ -145,12 +125,10 @@ class _ChatInputState extends State<ChatInput> {
                           contentPadding: const EdgeInsets.all(8),
                           suffixIcon: IconButton(
                             onPressed: () {
-                              if (_focusNode.hasFocus) {
-                                _focusNode.unfocus();
-                              }
+                              _focusNode.unfocus();
                               GetIt.instance
                                   .get<ChatCubit>()
-                                  .changeDisplayEmojiPicker(_emojiShowing);
+                                  .changeDisplayEmojiPicker(!_emojiShowing);
                             },
                             icon: BaseIcon.base(IconPath.emojiLine,
                                 color: BaseColor.grey300),
@@ -211,27 +189,27 @@ class _ChatInputState extends State<ChatInput> {
                     child: EmojiPicker(
                       textEditingController: _textMessage,
                       key: key,
-                      onEmojiSelected: (category, emoji) {
-                        if (!_hasSend) {
-                          GetIt.instance
-                              .get<ChatCubit>()
-                              .changeButtonSendState(_textMessage.text);
-                        }
-                      },
+                      onEmojiSelected: (category, emoji) => _updateButtomSend(),
                       config: const Config(emojiSizeMax: 24, columns: 9),
                     ),
                   ),
                 ),
                 Offstage(
                   offstage: !_imageShowing,
-                  child: const SizedBox(height: 250, child: GridGallery()),
+                  child: SizedBox(
+                    height: 250,
+                    child: GridGallery(
+                      onChange: (value) {
+                        image = value;
+                        _updateButtomSend();
+                      },
+                    ),
+                  ),
                 )
               ]),
             ),
           ]),
-        );
-      },
-    );
+        ));
   }
 
   _send() {
@@ -240,9 +218,20 @@ class _ChatInputState extends State<ChatInput> {
             SendMessageRequest(
               groupId: widget.groupId,
               content: _textMessage.text,
+              file: image,
             ),
           );
       _textMessage.clear();
+    }
+  }
+
+  _updateButtomSend() {
+    if (_hasSend && (_textMessage.text.isEmpty && image == null)) {
+      GetIt.instance.get<ChatCubit>().changeButtonSendState(false);
+    }
+
+    if (!_hasSend && (_textMessage.text.isNotEmpty || image != null)) {
+      GetIt.instance.get<ChatCubit>().changeButtonSendState(true);
     }
   }
 }

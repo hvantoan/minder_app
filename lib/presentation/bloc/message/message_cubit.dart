@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
@@ -36,15 +38,17 @@ class MessageCubit extends Cubit<MessageState> {
 
   sendMessage(SendMessageRequest request) async {
     emit(SendingMessageState(
+      null,
       message: Message(
-          content: request.content,
-          groupId: request.groupId,
-          isDisplayAvatar: false,
-          isDisplayTime: true,
-          isSend: true,
-          messageType: 0,
-          senderId: "",
-          createAt: DateTime.now()),
+        content: request.content,
+        groupId: request.groupId,
+        isDisplayAvatar: false,
+        isDisplayTime: true,
+        isSend: true,
+        messageType: 0,
+        senderId: "",
+        createAt: DateTime.now(),
+      ),
     ));
 
     Either<Failures, bool> messages = await ChatUseCase().sendMessage(request);

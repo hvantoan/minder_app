@@ -23,4 +23,24 @@ class StadiumAPI {
       rethrow;
     }
   }
+
+  Future<List<StadiumModel>> getStadiumSuggest(
+      {required String matchId}) async {
+    try {
+      final BaseResponse response = await BaseAPIService.post(
+          uri: ServicePath.stadiumSuggest(matchId: matchId),
+          withToken: true,
+          params: {});
+      if (response.isSuccess) {
+        final List<StadiumModel> stadiumModels =
+            (response.data!["items"] as List).map((stadium) {
+          return StadiumModel.fromJson(stadium);
+        }).toList();
+        return stadiumModels;
+      }
+      throw DataParsingException();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

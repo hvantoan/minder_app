@@ -1,11 +1,11 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:minder/util/style/base_color.dart';
+import 'package:minder/presentation/widget/checkbox/checkbox_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'dart:typed_data';
 
 class GridGallery extends StatefulWidget {
-  const GridGallery({super.key, this.scrollCtr});
-
+  const GridGallery({super.key, this.scrollCtr, required this.onChange});
+  final Function(Uint8List?) onChange;
   final ScrollController? scrollCtr;
 
   @override
@@ -13,8 +13,10 @@ class GridGallery extends StatefulWidget {
 }
 
 class _GridGalleryState extends State<GridGallery> {
-  final List<Widget> _mediaList = [];
+  final List<Uint8List> _mediaList = [];
+
   int currentPage = 0;
+  int selectedIndex = -1;
   int? lastPage;
 
   @override
@@ -38,63 +40,33 @@ class _GridGalleryState extends State<GridGallery> {
       List<AssetPathEntity> albums =
           await PhotoManager.getAssetPathList(onlyAll: true);
       List<AssetEntity> media = await albums[0]
-          .getAssetListPaged(size: 60, page: currentPage); //preloading files
-      List<Widget> temp = [];
+          .getAssetListPaged(size: 10, page: currentPage); //preloading files
+      List<Uint8List> temps = [];
       for (var asset in media) {
-        temp.add(
-          FutureBuilder(
-            future: asset.thumbnailDataWithSize(
-                const ThumbnailSize(200, 200)), //resolution of thumbnail
-            builder:
-                (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return SizedBox(
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned.fill(
-                        child: Image.memory(
-                          snapshot.data!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      if (asset.type == AssetType.video)
-                        const Align(
-                          alignment: Alignment.topRight,
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 5, bottom: 5),
-                            child: Icon(
-                              Icons.radio_button_checked,
-                              color: BaseColor.green500,
-                            ),
-                          ),
-                        ),
-                      if (asset.type == AssetType.video)
-                        const Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 5, bottom: 5),
-                            child: Icon(
-                              Icons.videocam,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                );
-              }
-              return Container();
-            },
-          ),
-        );
+        if (asset.type == AssetType.image) {
+          var file =
+              await asset.thumbnailDataWithSize(const ThumbnailSize(200, 200));
+          temps.add(file!);
+        }
       }
       setState(() {
-        _mediaList.addAll(temp);
+        _mediaList.addAll(temps);
         currentPage++;
       });
     } else {
       PhotoManager.openSetting();
     }
+  }
+
+  _onSlectedFile(Uint8List file, int index) {
+    if (selectedIndex == index) {
+      widget.onChange(null);
+      selectedIndex = -1;
+    } else {
+      widget.onChange(file);
+      selectedIndex = index;
+    }
+    setState(() {});
   }
 
   @override
@@ -105,13 +77,48 @@ class _GridGalleryState extends State<GridGallery> {
         return false;
       },
       child: GridView.builder(
-          controller: widget.scrollCtr,
-          itemCount: _mediaList.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, crossAxisSpacing: 2, mainAxisSpacing: 2),
-          itemBuilder: (BuildContext context, int index) {
-            return _mediaList[index];
-          }),
+        controller: widget.scrollCtr,
+        itemCount: _mediaList.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, crossAxisSpacing: 2, mainAxisSpacing: 2),
+        itemBuilder: (BuildContext context, int index) {
+          var file = _mediaList[index];
+          return SizedBox(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.memory(
+                    file,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _onSlectedFile(file, index);
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5, bottom: 5),
+                        child: selectedIndex == index
+                            ? CheckBoxWidget.base(
+                                currentValue: true,
+                                onChanged: (value) {
+                                  _onSlectedFile(file, index);
+                                },
+                              )
+                            : Container(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

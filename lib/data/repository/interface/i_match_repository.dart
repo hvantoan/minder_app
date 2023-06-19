@@ -10,8 +10,8 @@ abstract class MatchRepositoryInterface {
 
   Future<Either<Failures, match.Match>> getMatchById(String matchId);
 
-  Future<Either<Failures, void>> selectTime(String matchId, num dayOfWeek,
-      match.TimeOption timeOption, String teamId);
+  Future<Either<Failures, void>> selectTime(String matchId, DateTime date,
+      num dayOfWeek, match.TimeOption timeOption, String teamId);
 
   Future<Either<Failures, void>> selectStadium(
       String matchId, String stadiumId, String teamId);

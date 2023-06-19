@@ -19,10 +19,10 @@ class MatchControllerCubit extends Cubit<MatchControllerState> {
     emit(MatchControllerSuccess());
   }
 
-  Future<void> selectTime(String matchId, num dayOfWeek,
+  Future<void> selectTime(String matchId, DateTime date, num dayOfWeek,
       match.TimeOption timeOption, String teamId) async {
-    final response =
-        await MatchUseCase().selectTime(matchId, dayOfWeek, timeOption, teamId);
+    final response = await MatchUseCase()
+        .selectTime(matchId, date, dayOfWeek, timeOption, teamId);
     if (response.isLeft) {
       emit(MatchControllerFailure());
       return;

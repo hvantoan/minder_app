@@ -18,5 +18,15 @@ class StadiumsCubit extends Cubit<StadiumsState> {
     emit(StadiumsSuccess(response.right));
   }
 
+  Future<void> getStadiumSuggest({required String matchId}) async {
+    final response = await StadiumUseCase().getStadiumSuggest(matchId: matchId);
+    if (response.isLeft) {
+      emit(StadiumsFailure(S.current.txt_data_parsing_failed));
+      return;
+    }
+
+    emit(StadiumsSuccess(response.right));
+  }
+
   void clean() => emit(StadiumsInitial());
 }

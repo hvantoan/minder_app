@@ -124,7 +124,8 @@ class ImagePickerWidget {
     );
   }
 
-  static Widget buildRectangle(File? imagePath, String? url) {
+  static Widget buildRectangle(File? imagePath, String? url,
+      {BoxFit fit = BoxFit.cover}) {
     if (imagePath != null) {
       return Container(
         height: 186.0,
@@ -145,7 +146,18 @@ class ImagePickerWidget {
             color: Colors.white, border: Border.all(color: BaseColor.grey100)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.network(url, fit: BoxFit.cover),
+          child: Image.network(
+            url,
+            fit: fit,
+            errorBuilder: (context, error, stackTrace) {
+              return const Center(
+                  child: Icon(
+                Icons.replay_outlined,
+                color: Colors.red,
+                size: 32,
+              ));
+            },
+          ),
         ),
       );
     }

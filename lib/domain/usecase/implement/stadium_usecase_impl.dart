@@ -13,4 +13,15 @@ class StadiumUseCase extends StadiumUseCaseInterface {
     }
     return Right(response.right);
   }
+
+  @override
+  Future<Either<Failures, List<Stadium>>> getStadiumSuggest(
+      {required String matchId}) async {
+    final response =
+        await StadiumRepository().getStadiumSuggest(matchId: matchId);
+    if (response.isLeft) {
+      return Left(response.left);
+    }
+    return Right(response.right);
+  }
 }

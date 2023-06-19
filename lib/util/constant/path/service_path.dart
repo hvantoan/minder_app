@@ -48,6 +48,8 @@ class ServicePath {
   static const String stadium = "$serviceHost/stadium";
   static const String stadiumList = "list";
   static const String stadiumGet = "get";
+  static String stadiumSuggest({required String matchId}) =>
+      "$serviceHost/stadium/$matchId/suggest-for-match";
 
   ///Match
   static const String matches = "$serviceHost/matches";

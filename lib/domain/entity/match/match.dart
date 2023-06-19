@@ -67,7 +67,11 @@ class MatchTeam {
       this.date,
       this.hostMatch,
       this.opposingMatch,
-      this.stadium, this.teamName, this.avatar, this.latitude, this.longitude);
+      this.stadium,
+      this.teamName,
+      this.avatar,
+      this.latitude,
+      this.longitude);
 
   MatchTeam.fromModel(MatchTeamModel matchTeamModel) {
     id = matchTeamModel.id;
@@ -107,10 +111,12 @@ class TimeChoice {
 class TimeOption {
   num? from;
   num? to;
+  DateTime? date;
   String? displayTime;
   num? memberCount;
 
-  TimeOption({this.from, this.to, this.displayTime, this.memberCount});
+  TimeOption(
+      {this.from, this.to, this.displayTime, this.memberCount, this.date});
 
   TimeOption.fromModel(TimeOptionModel timeOptionModel) {
     from = timeOptionModel.from;

@@ -20,9 +20,14 @@ import 'package:tiengviet/tiengviet.dart';
 class SelectStadiumPage extends StatefulWidget {
   final Stadium? stadium;
   final LatLng latLng;
+  final String matchId;
 
-  const SelectStadiumPage({Key? key, this.stadium, required this.latLng})
-      : super(key: key);
+  const SelectStadiumPage({
+    Key? key,
+    this.stadium,
+    required this.latLng,
+    required this.matchId,
+  }) : super(key: key);
 
   @override
   State<SelectStadiumPage> createState() => _SelectStadiumPageState();
@@ -31,6 +36,7 @@ class SelectStadiumPage extends StatefulWidget {
 class _SelectStadiumPageState extends State<SelectStadiumPage> {
   Stadium? stadium;
   String currentSearchString = "";
+
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -39,7 +45,9 @@ class _SelectStadiumPageState extends State<SelectStadiumPage> {
       stadium = widget.stadium;
     });
     GetIt.instance.get<StadiumsCubit>().clean();
-    GetIt.instance.get<StadiumsCubit>().getData();
+    GetIt.instance
+        .get<StadiumsCubit>()
+        .getStadiumSuggest(matchId: widget.matchId);
     super.initState();
   }
 
@@ -110,24 +118,21 @@ class _SelectStadiumPageState extends State<SelectStadiumPage> {
                                   child: Row(
                                     children: [
                                       BaseIcon.base(IconPath.locationLine,
-                                          size: const Size(21, 21),
-                                          color: BaseColor.grey500),
+                                          size: const Size(16, 12),
+                                          color: BaseColor.green500),
                                       const SizedBox(
                                         width: 4.0,
                                       ),
                                       Text(
-                                        "${NumberFormat("###,###.##").format(LocationHelper.distance(widget.latLng, LatLng(stadium.latitude!, stadium.longitude!)))} km",
-                                        style: BaseTextStyle.body1(
-                                            color: BaseColor.grey500),
-                                      ),
+                                          "${NumberFormat("###,###.##").format(LocationHelper.distance(widget.latLng, LatLng(stadium.latitude!, stadium.longitude!)))} km",
+                                          style: BaseTextStyle.body2(
+                                              color: BaseColor.grey500)),
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  stadium.fullAddress!,
-                                  style: BaseTextStyle.body1(
-                                      color: BaseColor.grey500),
-                                ),
+                                Text(stadium.fullAddress!,
+                                    style: BaseTextStyle.body2(
+                                        color: BaseColor.grey500)),
                               ],
                             ),
                             onChanged: (value) => selectStadium(stadium),

@@ -43,7 +43,6 @@ dependencies:
   flutter_typeahead: ^4.3.8
   flutter_google_places: ^0.3.0
   photo_manager: ^2.6.0
-  gallery_view: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

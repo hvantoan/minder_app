@@ -7,15 +7,17 @@ part 'chat_state.dart';
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatInitialState());
 
-  changeButtonSendState(String text) {
-    emit(SendButtonState(hasSend: text.isNotEmpty));
+  changeButtonSendState(bool hasSend) {
+    emit(SendButtonState(hasSend: hasSend));
   }
 
   changeDisplayEmojiPicker(bool emojiShowing) {
-    emit(EmojiPickerDisplayState(emojiShowing: !emojiShowing));
+    print("Change EmojiPicker: $emojiShowing");
+    emit(ChangeEventState(emojiShowing: emojiShowing));
   }
 
   changeDisplayImagePicker(bool imageShowing) {
-    emit(ImagePickerState(imageShowing: !imageShowing));
+    print("Change Image: $imageShowing");
+    emit(ChangeEventState(imageShowing: imageShowing));
   }
 }

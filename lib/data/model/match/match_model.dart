@@ -87,8 +87,8 @@ class MatchTeamModel {
         json["stadium"] != null ? StadiumModel.fromJson(json["stadium"]) : null;
     teamName = json["teamName"];
     avatar = json["avatar"];
-    latitude = json["latitude"]??0;
-    longitude = json["longitude"]??0;
+    latitude = json["latitude"] ?? 0;
+    longitude = json["longitude"] ?? 0;
   }
 }
 

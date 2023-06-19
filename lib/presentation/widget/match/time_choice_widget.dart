@@ -46,8 +46,13 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
                         widget.timeChoice.dayOfWeek) &&
                     ((widget.team.from ?? -1) == e.from) &&
                     ((widget.team.to ?? -1) == e.to), () {
-              _selectTime(widget.matchId, widget.timeChoice.dayOfWeek!, e,
-                  widget.team.teamId!, context);
+              _selectTime(
+                  widget.matchId,
+                  widget.timeChoice.date!,
+                  widget.timeChoice.dayOfWeek!,
+                  e,
+                  widget.team.teamId!,
+                  context);
             });
           }).toList()
         ],
@@ -55,55 +60,13 @@ class _TimeChoiceWidgetState extends State<TimeChoiceWidget> {
     );
   }
 
-  void _selectTime(String matchId, num dayOfWeek, TimeOption timeOption,
-      String teamId, BuildContext context) async {
+  void _selectTime(String matchId, DateTime date, num dayOfWeek,
+      TimeOption timeOption, String teamId, BuildContext context) async {
     GetIt.instance.get<LoadingCoverController>().on(context);
     GetIt.instance
         .get<MatchControllerCubit>()
-        .selectTime(matchId, dayOfWeek, timeOption, teamId).then((value) =>     GetIt.instance.get<MatchControllerCubit>().check(matchId));
+        .selectTime(matchId, date, dayOfWeek, timeOption, teamId)
+        .then((value) =>
+            GetIt.instance.get<MatchControllerCubit>().check(matchId));
   }
 }
-
-// class TimeChoiceWidget {
-//   static base(
-//       {required TimeChoice timeChoice,
-//       required String matchId,
-//       required MatchTeam team,
-//       required BuildContext context,
-//       TimeOption? timeOption}) {
-//     return Padding(
-//       padding: const EdgeInsets.only(top: 20.0),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.only(bottom: 4.0),
-//             child: Text(
-//               "${timeChoice.displayDay!} (${TimeHelper.formatDate(timeChoice.date.toString())})",
-//               style: BaseTextStyle.body1(color: BaseColor.green500),
-//             ),
-//           ),
-//           ...timeChoice.options!
-//               .map((e) => TimeOptionWidget.base(
-//                   e,
-//                   ((team.selectedDayOfWeek ?? -1) == timeChoice.dayOfWeek) &&
-//                       ((team.from ?? -1) == e.from) &&
-//                       ((team.to ?? -1) == e.to),
-//                   () => _selectTime(matchId, timeChoice.dayOfWeek!, e,
-//                       team.teamId!, context)))
-//               .toList()
-//         ],
-//       ),
-//     );
-//   }
-//
-//   static void _selectTime(String matchId, num dayOfWeek, TimeOption timeOption,
-//       String teamId, BuildContext context) async {
-//     GetIt.instance.get<LoadingCoverController>().on(context);
-//     GetIt.instance
-//         .get<MatchControllerCubit>()
-//         .selectTime(matchId, dayOfWeek, timeOption, teamId)
-//         .then((value) =>
-//             GetIt.instance.get<LoadingCoverController>().off(context));
-//   }
-// }

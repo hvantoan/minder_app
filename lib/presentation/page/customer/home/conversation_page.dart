@@ -9,6 +9,7 @@ import 'package:minder/presentation/bloc/message/message_cubit.dart';
 import 'package:minder/presentation/page/customer/home/group_setting_page.dart';
 import 'package:minder/presentation/widget/avatar/avatar_widget.dart';
 import 'package:minder/presentation/widget/chat/chat_input.dart';
+import 'package:minder/presentation/widget/message/image_message.dart';
 import 'package:minder/presentation/widget/message/text_message.dart';
 import 'package:minder/presentation/widget/message/time_line_message.dart';
 import 'package:minder/util/constant/path/icon_path.dart';
@@ -133,6 +134,7 @@ class _ConversationPageState extends State<ConversationPage> {
             style: BaseTextStyle.body1(),
           ));
         }
+
         return GestureDetector(
           onTap: () => FocusManager,
           child: SingleChildScrollView(
@@ -150,7 +152,7 @@ class _ConversationPageState extends State<ConversationPage> {
                         case 1:
                           return Container();
                         case 2:
-                          return Container();
+                          return ImageMessage(message: message);
                         case 3:
                           return TimeLineMessage(message: message);
                         case 4:

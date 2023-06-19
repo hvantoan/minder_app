@@ -471,6 +471,7 @@ class _MatchSettingPageState extends State<MatchSettingPage> {
         context: context,
         isExpand: true,
         body: SelectStadiumPage(
+          matchId: widget.match.id!,
           stadium: team.stadium,
           latLng: LatLng(team.latitude!, team.longitude!),
         ));

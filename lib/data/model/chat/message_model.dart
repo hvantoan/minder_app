@@ -11,6 +11,7 @@ class MessageModel {
   String? avatar;
   String? name;
   String? userId;
+  String? imagePath;
 
   MessageModel({
     this.id,
@@ -25,6 +26,7 @@ class MessageModel {
     this.userId,
     this.isDisplayAvatar,
     this.isDisplayTime,
+    this.imagePath,
   });
 
   MessageModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +42,7 @@ class MessageModel {
     name = json['user']?['name'];
     userId = json['user']?['id'];
     avatar = json['user']?['avatar'];
+    imagePath = json['imagePath'];
   }
 
   Map<String, dynamic> toJson() {

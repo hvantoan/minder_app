@@ -53,10 +53,10 @@ class MatchRepository extends MatchRepositoryInterface {
   }
 
   @override
-  Future<Either<Failures, void>> selectTime(String matchId, num dayOfWeek,
-      match.TimeOption timeOption, String teamId) async {
+  Future<Either<Failures, void>> selectTime(String matchId, DateTime date,
+      num dayOfWeek, match.TimeOption timeOption, String teamId) async {
     try {
-      await MatchAPI().selectTime(matchId, dayOfWeek, timeOption, teamId);
+      await MatchAPI().selectTime(matchId, date, dayOfWeek, timeOption, teamId);
       return const Right(null);
     } catch (e) {
       return Left(FailuresHelper.fromCommonException(e));

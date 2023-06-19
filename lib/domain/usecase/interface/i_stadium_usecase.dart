@@ -4,4 +4,6 @@ import 'package:minder/domain/entity/stadium/stadium.dart';
 
 abstract class StadiumUseCaseInterface {
   Future<Either<Failures, List<Stadium>>> getStadiums();
+  Future<Either<Failures, List<Stadium>>> getStadiumSuggest(
+      {required String matchId});
 }

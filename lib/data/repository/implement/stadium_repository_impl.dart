@@ -17,4 +17,17 @@ class StadiumRepository extends StadiumRepositoryInterface {
       return Left(FailuresHelper.fromCommonException(e));
     }
   }
+
+  @override
+  Future<Either<Failures, List<Stadium>>> getStadiumSuggest(
+      {required String matchId}) async {
+    try {
+      final response = await StadiumAPI().getStadiumSuggest(matchId: matchId);
+      final List<Stadium> teams =
+          response.map((e) => Stadium.fromModel(e)).toList();
+      return Right(teams);
+    } catch (e) {
+      return Left(FailuresHelper.fromCommonException(e));
+    }
+  }
 }

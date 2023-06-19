@@ -12,16 +12,13 @@ class SendButtonState extends ChatState {
   List<Object> get props => [hasSend];
 }
 
-class EmojiPickerDisplayState extends ChatState {
+class ChangeEventState extends ChatState {
   final bool emojiShowing;
-  EmojiPickerDisplayState({required this.emojiShowing});
+  final bool imageShowing;
+  ChangeEventState({
+    this.emojiShowing = false,
+    this.imageShowing = false,
+  });
 
   List<Object> get props => [emojiShowing];
-}
-
-class ImagePickerState extends ChatState {
-  final bool imageShowing;
-  ImagePickerState({required this.imageShowing});
-
-  List<Object> get props => [imageShowing];
 }

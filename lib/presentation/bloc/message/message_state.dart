@@ -19,9 +19,10 @@ class MessageErrorState extends MessageState {}
 
 class SendingMessageState extends MessageState {
   final Message message;
-  SendingMessageState({required this.message});
+  final Uint8List? file;
+  SendingMessageState(this.file, {required this.message});
 
-  List<Object> get props => [message];
+  List<Object?> get props => [message, file];
 }
 
 class SendedMessageState extends MessageState {}

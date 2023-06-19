@@ -59,8 +59,8 @@ class MatchAPI {
     }
   }
 
-  Future<void> selectTime(String matchId, num dayOfWeek, TimeOption timeOption,
-      String teamId) async {
+  Future<void> selectTime(String matchId, DateTime date, num dayOfWeek,
+      TimeOption timeOption, String teamId) async {
     try {
       await BaseAPIService.post(
         uri: "${ServicePath.matches}/$matchId/${ServicePath.selectTime}",
@@ -70,6 +70,7 @@ class MatchAPI {
           "dayOfWeek": dayOfWeek,
           "from": timeOption.from,
           "to": timeOption.to,
+          "date": date.toString()
         },
       );
     } catch (e) {

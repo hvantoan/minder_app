@@ -47,10 +47,10 @@ class MatchUseCase extends MatchUseCaseInterface {
   }
 
   @override
-  Future<Either<Failures, void>> selectTime(String matchId, num dayOfWeek,
-      match.TimeOption timeOption, String teamId) async {
+  Future<Either<Failures, void>> selectTime(String matchId, DateTime date,
+      num dayOfWeek, match.TimeOption timeOption, String teamId) async {
     final response = await MatchRepository()
-        .selectTime(matchId, dayOfWeek, timeOption, teamId);
+        .selectTime(matchId, date, dayOfWeek, timeOption, teamId);
     if (response.isLeft) {
       return Left(response.left);
     }
