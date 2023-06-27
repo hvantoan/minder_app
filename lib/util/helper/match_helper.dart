@@ -31,18 +31,10 @@ class MatchHelper {
           S.current.txt_wait_member_confirm,
           style: BaseTextStyle.body1(color: BaseColor.green500),
         );
-        final state = calculateTime(match.hostTeam!.date.toString());
-        if (state == 0) {
-          return Text(S.current.txt_playing,
-              style: BaseTextStyle.body1(color: BaseColor.green500));
-        }
-        if (state == 1) {
-          return Text(getTime(match.hostTeam!.date.toString()),
-              style: BaseTextStyle.body1(color: BaseColor.green500));
-        }
-        return Text(S.current.txt_finished,
-            style: BaseTextStyle.body1(color: BaseColor.grey500));
       case 3:
+        return Text(S.current.txt_countdown,
+            style: BaseTextStyle.body1(color: BaseColor.green500));
+      case 4:
         return Text(S.current.txt_canceled,
             style: BaseTextStyle.body1(color: BaseColor.grey300));
       default:

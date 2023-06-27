@@ -87,7 +87,7 @@ class _MatchWidgetState extends State<MatchWidget> {
                         teamId: team.id,
                       )))
           : {
-              if (status == 2)
+              if (status == 2 || status == 3)
                 setState(() {
                   isExpand = !isExpand;
                 })
@@ -124,7 +124,9 @@ class _MatchWidgetState extends State<MatchWidget> {
               ],
             ),
             if (regency == 0)
-              if ((status == 2 || (status == 1 && (host.hasConfirm ?? true))) &&
+              if ((status == 2 ||
+                      status == 3 ||
+                      (status == 1 && (host.hasConfirm ?? true))) &&
                   thisMatch.participants!
                       .where((element) => element.userId == userId)
                       .isEmpty)

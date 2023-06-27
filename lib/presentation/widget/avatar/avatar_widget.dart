@@ -61,6 +61,14 @@ class AvatarWidget {
                       ),
                     );
                   },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                        child: Icon(
+                      Icons.replay_outlined,
+                      color: Colors.red,
+                      size: 32,
+                    ));
+                  },
                 ),
               ),
             ),

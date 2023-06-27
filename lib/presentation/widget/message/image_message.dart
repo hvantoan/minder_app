@@ -47,8 +47,6 @@ class ImageMessage extends StatelessWidget {
                         style: BaseTextStyle.body2(color: BaseColor.blue500)),
                   ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color:
                         message.isSend ? BaseColor.green100 : BaseColor.grey100,
@@ -64,7 +62,7 @@ class ImageMessage extends StatelessWidget {
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                     children: [
-                      _buildImage(file),
+                      _buildImage(file, context),
                       if (message.content.isNotEmpty)
                         Text(message.content, style: BaseTextStyle.body1()),
                     ],
@@ -84,10 +82,10 @@ class ImageMessage extends StatelessWidget {
     );
   }
 
-  Container _buildImage(Uint8List? data) {
+  Container _buildImage(Uint8List? data, BuildContext context) {
     if (data != null) {
       return Container(
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width * 0.4,
         decoration: BoxDecoration(
             color: Colors.white, border: Border.all(color: BaseColor.grey100)),
         child: ClipRRect(
@@ -109,7 +107,7 @@ class ImageMessage extends StatelessWidget {
       );
     }
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
           color: Colors.white, border: Border.all(color: BaseColor.grey100)),
       child: ClipRRect(

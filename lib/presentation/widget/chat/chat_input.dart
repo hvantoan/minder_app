@@ -221,6 +221,7 @@ class _ChatInputState extends State<ChatInput> {
               file: image,
             ),
           );
+      image = null;
       _textMessage.clear();
     }
   }
